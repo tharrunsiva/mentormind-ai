@@ -195,3 +195,5 @@ MentorMind-AI/
 ## 📄 License
 
 Developed for hackathon & educational technology demonstration. Built with standard open-source web and AI engineering frameworks.
+#   m e n t o r m i n d - a i  
+ 
