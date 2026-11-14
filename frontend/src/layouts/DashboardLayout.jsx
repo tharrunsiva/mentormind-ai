@@ -208,23 +208,26 @@ const DashboardLayout = () => {
             <form onSubmit={handleSearchSubmit} className="d-none d-md-flex position-relative" style={{ width: 340 }}>
               <i
                 className="bi bi-search position-absolute top-50 start-0 translate-middle-y ms-3"
-                style={{ color: '#94A3B8' }}
+                style={{ color: '#818CF8' }}
               ></i>
               <input
                 ref={searchInputRef}
                 type="text"
-                className="form-control rounded-pill ps-5 pe-5 py-2 border-0"
+                className="form-control rounded-pill ps-5 pe-5 py-2 border"
                 style={{
-                  background: '#F1F5F9',
+                  background: 'rgba(255, 255, 255, 0.75)',
+                  borderColor: 'rgba(226, 232, 240, 0.8)',
+                  backdropFilter: 'blur(10px)',
+                  WebkitBackdropFilter: 'blur(10px)',
                   fontSize: '0.88rem',
-                  boxShadow: 'inset 0 1px 2px rgba(0, 0, 0, 0.05)',
+                  boxShadow: '0 2px 6px rgba(99, 102, 241, 0.05)',
                 }}
                 placeholder="Search careers, skills, topics..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
               <span
-                className="position-absolute top-50 end-0 translate-middle-y me-2 badge rounded-pill bg-white text-secondary border small"
+                className="position-absolute top-50 end-0 translate-middle-y me-2 badge rounded-pill bg-white text-secondary border small shadow-sm"
                 style={{ fontSize: '0.68rem' }}
               >
                 ⌘K

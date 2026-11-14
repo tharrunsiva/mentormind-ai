@@ -38,9 +38,19 @@ const ProtectedRoute = ({ children }) => {
 
 function App() {
   return (
-    <Routes>
-      {/* Public Pages */}
-      <Route path="/" element={<LandingPage />} />
+    <>
+      {/* Living Colorful Aurora Background Canvas */}
+      <div className="aurora-bg-container" aria-hidden="true">
+        <div className="aurora-blob aurora-blob-1"></div>
+        <div className="aurora-blob aurora-blob-2"></div>
+        <div className="aurora-blob aurora-blob-3"></div>
+        <div className="aurora-blob aurora-blob-4"></div>
+        <div className="aurora-blob aurora-blob-5"></div>
+      </div>
+
+      <Routes>
+        {/* Public Pages */}
+        <Route path="/" element={<LandingPage />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
       <Route path="/forgot-password" element={<ForgotPasswordPage />} />
@@ -84,6 +94,7 @@ function App() {
       {/* Fallback */}
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
+    </>
   );
 }
 

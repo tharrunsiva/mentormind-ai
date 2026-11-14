@@ -47,17 +47,25 @@ const RegisterPage = () => {
   };
 
   return (
-    <div className="min-vh-100 d-flex flex-column justify-content-center align-items-center bg-light py-5 px-3">
-      <Link to="/" className="d-flex align-items-center gap-2 mb-4 text-decoration-none">
-        <div className="bg-primary text-white rounded-3 d-flex align-items-center justify-content-center" style={{ width: 40, height: 40 }}>
+    <div className="min-vh-100 d-flex flex-column justify-content-center align-items-center py-5 px-3" style={{ background: 'transparent' }}>
+      <Link to="/" className="d-flex align-items-center gap-2.5 mb-4 text-decoration-none">
+        <div
+          className="d-flex align-items-center justify-content-center text-white rounded-3 shadow"
+          style={{ width: 44, height: 44, background: 'linear-gradient(135deg, #4F46E5 0%, #D946EF 100%)' }}
+        >
           <i className="bi bi-cpu-fill fs-5"></i>
         </div>
-        <span className="fw-bold fs-4 text-dark" style={{ letterSpacing: '-0.03em' }}>MentorMind</span>
-        <span className="badge bg-primary-subtle text-primary">AI</span>
+        <span className="fw-extrabold fs-4 text-dark" style={{ letterSpacing: '-0.03em' }}>MentorMind</span>
+        <span
+          className="badge px-2.5 py-1 rounded-pill text-white"
+          style={{ background: 'linear-gradient(135deg, #8B5CF6 0%, #EC4899 100%)', fontSize: '0.72rem', fontWeight: 700 }}
+        >
+          AI
+        </span>
       </Link>
 
-      <div className="card border-0 shadow-sm rounded-4 p-4 p-sm-5 bg-white w-100" style={{ maxWidth: 540 }}>
-        <h3 className="fw-bold text-dark text-center mb-1">Create Your Account</h3>
+      <div className="card landing-card-glass border-0 rounded-4 p-4 p-sm-5 w-100 shadow-lg" style={{ maxWidth: 540 }}>
+        <h3 className="fw-extrabold text-dark text-center mb-1">Create Your Account</h3>
         <p className="text-secondary text-center small mb-4">Start your personalized, AI-guided career transformation</p>
 
         {error && (
@@ -177,7 +185,7 @@ const RegisterPage = () => {
             </div>
           </div>
 
-          <button type="submit" className="btn btn-primary w-100 py-2.5 mb-3" disabled={loading}>
+          <button type="submit" className="btn btn-vibrant-primary w-100 py-2.5 mb-3 justify-content-center shadow" disabled={loading}>
             {loading ? (
               <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
             ) : null}
@@ -187,7 +195,7 @@ const RegisterPage = () => {
 
         <p className="text-center text-muted small mt-2 mb-0">
           Already have an account?{' '}
-          <Link to="/login" className="text-primary fw-semibold text-decoration-none">
+          <Link to="/login" className="fw-bold text-decoration-none" style={{ color: '#4F46E5' }}>
             Sign In
           </Link>
         </p>
