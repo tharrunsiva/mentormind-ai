@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { useTheme } from '../context/ThemeContext';
 import { roadmapAPI, skillGapAPI, assessmentAPI, analyticsAPI } from '../services/api';
 import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid } from 'recharts';
 
 const DashboardPage = () => {
   const { user, profile } = useAuth();
-  const { isDark } = useTheme();
   const [loading, setLoading] = useState(true);
   const [roadmap, setRoadmap] = useState(null);
   const [gapReport, setGapReport] = useState(null);
@@ -46,15 +44,9 @@ const DashboardPage = () => {
     fetchDashboardData();
   }, []);
 
-  const getGreeting = () => {
-    const hr = new Date().getHours();
-    if (hr < 12) return 'Good morning';
-    if (hr < 17) return 'Good afternoon';
-    return 'Good evening';
-  };
-
   const readinessScore = gapReport?.overallReadinessPercentage || profile?.careerReadinessScore || 48;
   const targetCareerTitle = profile?.targetCareerName || 'Full Stack Developer';
+  const candidateId = `MM-IN-2026-${(user?._id || '90412').slice(-5).toUpperCase()}`;
 
   // Find active phase and next pending task
   let currentPhase = null;
@@ -84,370 +76,335 @@ const DashboardPage = () => {
   const masteredCount = profile?.existingTechnicalSkills?.filter(s => (s.score || 0) >= 75).length || 2;
   const totalSkillsCount = profile?.existingTechnicalSkills?.length || 5;
 
-  // Circular Apple Ring calculation
-  const radius = 48;
-  const circumference = 2 * Math.PI * radius;
-  const strokeDashoffset = circumference - (readinessScore / 100) * circumference;
-
   return (
-    <div className="fade-in">
-      {/* Welcome Header with macOS Style Action Controls */}
-      <div className="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
-        <div>
-          <div className="d-flex align-items-center gap-2 mb-1">
-            <h2 className="fw-bold mb-0" style={{ letterSpacing: '-0.03em' }}>
-              {getGreeting()}, {user?.name?.split(' ')[0] || 'Learner'}
-            </h2>
-            <span className="fs-4">👋</span>
+    <div>
+      {/* Official Candidate Dossier Header */}
+      <div className="card border mb-4 bg-white shadow-sm overflow-hidden">
+        <div className="card-header-gov">
+          <div className="d-flex align-items-center gap-2">
+            <i className="bi bi-person-vcard fs-5"></i>
+            <h5 className="fw-bold mb-0">Candidate Official Dossier & Registration Card</h5>
           </div>
-          <p className="text-secondary mb-0" style={{ fontSize: '0.94rem' }}>
-            Tracking your autonomous journey toward{' '}
-            <strong className="text-primary">{targetCareerTitle}</strong>.
-          </p>
+          <span className="gov-verified-pill">
+            <i className="bi bi-shield-check"></i> IDENTITY VERIFIED
+          </span>
         </div>
 
-        <div className="d-flex gap-2">
-          <Link to="/roadmap" className="btn btn-outline-primary d-flex align-items-center gap-2">
-            <i className="bi bi-map"></i> View Roadmap
-          </Link>
-          <Link to="/mentor" className="btn btn-primary d-flex align-items-center gap-2">
-            <i className="bi bi-robot"></i> Ask AI Mentor
-          </Link>
+        <div className="card-body p-4">
+          <div className="row g-4 align-items-center">
+            <div className="col-md-8">
+              <div className="d-flex flex-wrap align-items-center gap-3 mb-2">
+                <h3 className="fw-bold text-dark mb-0">{user?.name}</h3>
+                <span className="badge bg-secondary font-monospace" style={{ fontSize: '0.8rem' }}>
+                  {candidateId}
+                </span>
+                <span className="gov-seal-badge">NCS Tier-1 Registered</span>
+              </div>
+
+              <div className="row g-2 small text-secondary mt-1">
+                <div className="col-sm-6">
+                  <span className="text-muted fw-semibold">Target Specialization:</span>{' '}
+                  <strong className="text-primary">{targetCareerTitle}</strong>
+                </div>
+                <div className="col-sm-6">
+                  <span className="text-muted fw-semibold">Institution / Academy:</span>{' '}
+                  <strong>{profile?.institution || 'State University of Technology'}</strong>
+                </div>
+                <div className="col-sm-6">
+                  <span className="text-muted fw-semibold">Educational Degree:</span>{' '}
+                  <strong>{profile?.degree || 'B.S. Computer Science'}</strong>
+                </div>
+                <div className="col-sm-6">
+                  <span className="text-muted fw-semibold">National Percentile:</span>{' '}
+                  <span className="text-success fw-bold">Top 16% Nationally</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="col-md-4 text-md-end">
+              <div className="d-inline-flex flex-column align-items-md-end gap-2">
+                <Link to="/roadmap" className="btn btn-primary btn-sm px-3">
+                  <i className="bi bi-signpost-split-fill"></i> View Official Directives
+                </Link>
+                <Link to="/assessment" className="btn btn-outline-primary btn-sm px-3">
+                  <i className="bi bi-patch-check-fill"></i> Take Assessment
+                </Link>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
-      {/* Key Metric Stats Row - macOS Tahoe Frosted Widgets */}
+      {/* Official Metric Cards */}
       <div className="row g-3 mb-4">
         <div className="col-sm-6 col-lg-2">
-          <div className="card mac-card p-3 h-100 card-hover">
-            <div className="text-secondary small fw-bold text-uppercase" style={{ fontSize: '0.7rem', letterSpacing: '0.04em' }}>
-              Total Skills
+          <div className="card p-3 h-100 border bg-white">
+            <div className="text-muted small fw-bold text-uppercase" style={{ fontSize: '0.68rem', letterSpacing: '0.04em' }}>
+              Registered Skills
             </div>
-            <div className="d-flex align-items-baseline gap-2 mt-2">
-              <span className="fs-3 fw-bold">{totalSkillsCount}</span>
-              <span className="small text-success fw-medium">+2 this wk</span>
+            <div className="d-flex align-items-baseline gap-2 mt-1">
+              <span className="fs-3 fw-bold text-dark">{totalSkillsCount}</span>
+              <span className="small text-muted">evaluated</span>
             </div>
           </div>
         </div>
 
         <div className="col-sm-6 col-lg-2">
-          <div className="card mac-card p-3 h-100 card-hover">
-            <div className="text-secondary small fw-bold text-uppercase" style={{ fontSize: '0.7rem', letterSpacing: '0.04em' }}>
-              Mastered
+          <div className="card p-3 h-100 border bg-white">
+            <div className="text-muted small fw-bold text-uppercase" style={{ fontSize: '0.68rem', letterSpacing: '0.04em' }}>
+              Ministry Certified
             </div>
-            <div className="d-flex align-items-baseline gap-2 mt-2">
+            <div className="d-flex align-items-baseline gap-2 mt-1">
               <span className="fs-3 fw-bold text-success">{masteredCount}</span>
-              <span className="small text-secondary">&gt; 75% score</span>
+              <span className="small text-success fw-semibold">Verified</span>
             </div>
           </div>
         </div>
 
         <div className="col-sm-6 col-lg-2">
-          <div className="card mac-card p-3 h-100 card-hover">
-            <div className="text-secondary small fw-bold text-uppercase" style={{ fontSize: '0.7rem', letterSpacing: '0.04em' }}>
-              Roadmap Progress
+          <div className="card p-3 h-100 border bg-white">
+            <div className="text-muted small fw-bold text-uppercase" style={{ fontSize: '0.68rem', letterSpacing: '0.04em' }}>
+              Directives Progress
             </div>
-            <div className="d-flex align-items-baseline gap-2 mt-2">
+            <div className="d-flex align-items-baseline gap-2 mt-1">
               <span className="fs-3 fw-bold text-primary">{roadmap?.overallProgress || 35}%</span>
-              <span className="small text-secondary">on track</span>
+              <span className="small text-muted">compliant</span>
             </div>
           </div>
         </div>
 
         <div className="col-sm-6 col-lg-2">
-          <div className="card mac-card p-3 h-100 card-hover">
-            <div className="text-secondary small fw-bold text-uppercase" style={{ fontSize: '0.7rem', letterSpacing: '0.04em' }}>
-              Learning Streak
+          <div className="card p-3 h-100 border bg-white">
+            <div className="text-muted small fw-bold text-uppercase" style={{ fontSize: '0.68rem', letterSpacing: '0.04em' }}>
+              Attendance Streak
             </div>
-            <div className="d-flex align-items-baseline gap-2 mt-2">
+            <div className="d-flex align-items-baseline gap-2 mt-1">
               <span className="fs-3 fw-bold text-warning">
-                <i className="bi bi-fire me-1"></i>{profile?.streakDays || 5}
+                <i className="bi bi-award me-1"></i>{profile?.streakDays || 5}
               </span>
-              <span className="small text-secondary">days</span>
+              <span className="small text-muted">days logged</span>
             </div>
           </div>
         </div>
 
         <div className="col-sm-6 col-lg-2">
-          <div className="card mac-card p-3 h-100 card-hover">
-            <div className="text-secondary small fw-bold text-uppercase" style={{ fontSize: '0.7rem', letterSpacing: '0.04em' }}>
-              Tasks Completed
+          <div className="card p-3 h-100 border bg-white">
+            <div className="text-muted small fw-bold text-uppercase" style={{ fontSize: '0.68rem', letterSpacing: '0.04em' }}>
+              Curricula Units
             </div>
-            <div className="d-flex align-items-baseline gap-2 mt-2">
-              <span className="fs-3 fw-bold">{analyticsData?.summary?.totalTasksCompleted || 3}</span>
-              <span className="small text-secondary">modules</span>
+            <div className="d-flex align-items-baseline gap-2 mt-1">
+              <span className="fs-3 fw-bold text-dark">{analyticsData?.summary?.totalTasksCompleted || 3}</span>
+              <span className="small text-muted">cleared</span>
             </div>
           </div>
         </div>
 
         <div className="col-sm-6 col-lg-2">
-          <div className="card mac-card p-3 h-100 card-hover">
-            <div className="text-secondary small fw-bold text-uppercase" style={{ fontSize: '0.7rem', letterSpacing: '0.04em' }}>
-              Assessment Avg
+          <div className="card p-3 h-100 border bg-white">
+            <div className="text-muted small fw-bold text-uppercase" style={{ fontSize: '0.68rem', letterSpacing: '0.04em' }}>
+              Assessment Index
             </div>
-            <div className="d-flex align-items-baseline gap-2 mt-2">
-              <span className="fs-3 fw-bold">
+            <div className="d-flex align-items-baseline gap-2 mt-1">
+              <span className="fs-3 fw-bold text-dark">
                 {recentAssessments.length > 0 ? recentAssessments[0].percentage : 82}%
               </span>
-              <span className="small text-success fw-medium">Passing</span>
+              <span className="small text-success fw-bold">Grade A</span>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Main Grid: Career Readiness Ring & Roadmap Preview */}
+      {/* Main Grid: National Readiness Benchmark & Roadmap Preview */}
       <div className="row g-4 mb-4">
-        {/* Career Readiness Activity Ring (Apple Watch / macOS Activity Style) */}
+        {/* National Readiness Benchmark */}
         <div className="col-lg-5">
-          <div className="card mac-card p-4 h-100">
-            <div className="d-flex justify-content-between align-items-center mb-3">
+          <div className="card border bg-white h-100 shadow-sm">
+            <div className="p-3 px-4 border-bottom bg-light d-flex justify-content-between align-items-center">
               <div className="d-flex align-items-center gap-2">
-                <div className="mac-traffic-lights me-1">
-                  <span className="mac-traffic-dot mac-traffic-close" style={{ width: 8, height: 8 }}></span>
-                  <span className="mac-traffic-dot mac-traffic-minimize" style={{ width: 8, height: 8 }}></span>
-                  <span className="mac-traffic-dot mac-traffic-zoom" style={{ width: 8, height: 8 }}></span>
-                </div>
-                <h5 className="fw-bold mb-0">Career Readiness</h5>
+                <i className="bi bi-speedometer2 text-primary fs-5"></i>
+                <h6 className="fw-bold mb-0 text-dark">National Career Readiness Index</h6>
               </div>
-              <Link to="/skill-gap" className="small text-primary text-decoration-none fw-semibold">
-                Full Gap Report <i className="bi bi-arrow-right"></i>
+              <Link to="/skill-gap" className="small text-primary text-decoration-none fw-bold">
+                View Gap Audit <i className="bi bi-arrow-right"></i>
               </Link>
             </div>
 
-            <div className="d-flex align-items-center gap-4 py-2">
-              {/* Apple Activity Style Circular Progress Gauge */}
-              <div className="position-relative d-flex align-items-center justify-content-center flex-shrink-0" style={{ width: 120, height: 120 }}>
-                <svg width="120" height="120" className="mac-progress-ring">
-                  <circle
-                    className="mac-progress-circle-bg"
-                    strokeWidth="10"
-                    fill="transparent"
-                    r={radius}
-                    cx="60"
-                    cy="60"
-                  />
-                  <circle
-                    className="mac-progress-circle"
-                    strokeWidth="10"
-                    strokeDasharray={`${circumference} ${circumference}`}
-                    style={{ strokeDashoffset }}
-                    fill="transparent"
-                    r={radius}
-                    cx="60"
-                    cy="60"
-                  />
-                </svg>
-                <div className="position-absolute text-center">
-                  <span className="fs-3 fw-bold text-primary d-block" style={{ lineHeight: 1 }}>{readinessScore}%</span>
-                  <span className="text-secondary text-uppercase fw-semibold" style={{ fontSize: '0.62rem' }}>Index</span>
+            <div className="card-body p-4">
+              <div className="d-flex align-items-center gap-4 py-2">
+                <div
+                  className="rounded-circle d-flex flex-column align-items-center justify-content-center text-center shadow-sm flex-shrink-0"
+                  style={{
+                    width: 120,
+                    height: 120,
+                    background: `conic-gradient(#0F2C59 ${readinessScore * 3.6}deg, #E2E8F0 0deg)`,
+                    padding: 8,
+                  }}
+                >
+                  <div className="bg-white w-100 h-100 rounded-circle d-flex flex-column align-items-center justify-content-center">
+                    <span className="fs-2 fw-extrabold text-primary" style={{ lineHeight: 1 }}>{readinessScore}%</span>
+                    <span className="text-muted fw-bold" style={{ fontSize: '0.62rem', letterSpacing: '0.04em' }}>READINESS</span>
+                  </div>
+                </div>
+
+                <div>
+                  <h6 className="fw-bold text-dark mb-1">{targetCareerTitle}</h6>
+                  <p className="text-muted small mb-2" style={{ lineHeight: 1.45 }}>
+                    Evaluated against National Occupational Standards (NOS Code: IT-SWE-2026).
+                  </p>
+                  <div className="d-flex flex-wrap gap-1">
+                    <span className="badge bg-success-subtle text-success">
+                      {gapReport?.strongSkills?.length || 2} Benchmark Cleared
+                    </span>
+                    <span className="badge bg-warning-subtle text-warning">
+                      {gapReport?.partialSkills?.length || 2} In Development
+                    </span>
+                    <span className="badge bg-danger-subtle text-danger">
+                      {gapReport?.missingSkills?.length || 3} Skill Gap
+                    </span>
+                  </div>
                 </div>
               </div>
 
-              <div>
-                <h6 className="fw-bold mb-1">{targetCareerTitle}</h6>
-                <p className="text-secondary small mb-2" style={{ lineHeight: 1.45 }}>
-                  Synthesized across {totalSkillsCount} assessed skills against current industry benchmarks.
-                </p>
-                <div className="d-flex flex-wrap gap-1">
-                  <span className="badge rounded-pill bg-success-subtle text-success">
-                    {gapReport?.strongSkills?.length || 2} Strong
-                  </span>
-                  <span className="badge rounded-pill bg-warning-subtle text-warning">
-                    {gapReport?.partialSkills?.length || 2} Developing
-                  </span>
-                  <span className="badge rounded-pill bg-danger-subtle text-danger">
-                    {gapReport?.missingSkills?.length || 3} Missing
-                  </span>
-                </div>
+              <div className="p-3 bg-light rounded-2 border mt-3 small text-secondary">
+                <i className="bi bi-shield-check text-success me-1"></i>
+                <strong>Statutory Standard:</strong> Evaluation calculated from verified technical assessments and coursework completion ratios.
               </div>
-            </div>
-
-            <div
-              className="p-3 rounded-3 mt-3 small text-secondary"
-              style={{ background: 'rgba(140, 140, 150, 0.08)', border: '1px solid var(--mac-border)' }}
-            >
-              <i className="bi bi-info-circle text-primary me-1"></i>
-              <strong>Transparent Evaluation:</strong> Real-time deterministic weighted ratio based on verified assessment scores and roadmap milestones.
             </div>
           </div>
         </div>
 
-        {/* Learning Roadmap Preview */}
+        {/* Learning Roadmap Directives Preview */}
         <div className="col-lg-7">
-          <div className="card mac-card p-4 h-100">
-            <div className="d-flex justify-content-between align-items-center mb-3">
+          <div className="card border bg-white h-100 shadow-sm">
+            <div className="p-3 px-4 border-bottom bg-light d-flex justify-content-between align-items-center">
               <div>
-                <span
-                  className="badge rounded-pill mb-1"
-                  style={{
-                    background: 'rgba(0, 113, 227, 0.12)',
-                    color: 'var(--mac-blue)',
-                    fontWeight: 600,
-                  }}
-                >
-                  Phase {currentPhase?.phaseNumber || 2} in progress
+                <span className="badge bg-primary text-white me-2">
+                  Phase {currentPhase?.phaseNumber || 2}
                 </span>
-                <h5 className="fw-bold mb-0">
+                <span className="fw-bold text-dark">
                   {currentPhase?.title || 'Phase 2: Core Engineering Specialization'}
-                </h5>
+                </span>
               </div>
               <Link to="/roadmap" className="btn btn-sm btn-primary px-3">
-                Continue Learning
+                Action Directives
               </Link>
             </div>
 
-            <p className="text-secondary small mb-3">
-              {currentPhase?.description || 'Deep-dive into component architecture, backend integration, and state.'}
-            </p>
+            <div className="card-body p-4 d-flex flex-column">
+              <p className="text-secondary small mb-3">
+                {currentPhase?.description || 'Deep-dive into component architecture, backend integration, and state.'}
+              </p>
 
-            {nextTask && (
-              <div
-                className="p-3 rounded-3 mb-3"
-                style={{
-                  background: 'rgba(140, 140, 150, 0.06)',
-                  border: '1px solid var(--mac-border)',
-                }}
-              >
-                <div className="d-flex justify-content-between align-items-center mb-1">
-                  <span className="small text-secondary fw-bold text-uppercase" style={{ fontSize: '0.68rem', letterSpacing: '0.04em' }}>
-                    Next Priority Task
-                  </span>
-                  <span className="badge rounded-pill bg-warning-subtle text-warning" style={{ fontSize: '0.72rem' }}>
-                    Priority: {nextTask.priority || 'High'}
-                  </span>
+              {nextTask && (
+                <div className="p-3 bg-light rounded-2 border mb-3">
+                  <div className="d-flex justify-content-between align-items-center mb-1">
+                    <span className="small text-muted fw-bold text-uppercase" style={{ fontSize: '0.68rem', letterSpacing: '0.04em' }}>
+                      IMMEDIATE PRIORITY DIRECTIVE
+                    </span>
+                    <span className="badge bg-warning-subtle text-warning">
+                      Priority: {nextTask.priority || 'High'}
+                    </span>
+                  </div>
+                  <h6 className="fw-bold text-dark mb-1">{nextTask.topic}</h6>
+                  <p className="small text-muted mb-2">{nextTask.description}</p>
+                  <div className="d-flex align-items-center gap-3 small text-muted">
+                    <span><i className="bi bi-clock me-1"></i> Duration: {nextTask.estimatedHours || 4} hours</span>
+                    <span><i className="bi bi-tag me-1"></i> Competency: {nextTask.skillName}</span>
+                  </div>
                 </div>
-                <h6 className="fw-bold mb-1">{nextTask.topic}</h6>
-                <p className="small text-secondary mb-2">{nextTask.description}</p>
-                <div className="d-flex align-items-center gap-3 small text-secondary">
-                  <span><i className="bi bi-clock me-1"></i> Est: {nextTask.estimatedHours || 4} hours</span>
-                  <span><i className="bi bi-tag me-1"></i> Skill: {nextTask.skillName}</span>
-                </div>
-              </div>
-            )}
+              )}
 
-            <div className="mt-auto">
-              <div className="d-flex justify-content-between small text-secondary mb-1">
-                <span>Phase Progress</span>
-                <span className="fw-semibold">50%</span>
-              </div>
-              <div className="progress rounded-pill" style={{ height: 6, background: 'rgba(140, 140, 150, 0.15)' }}>
-                <div className="progress-bar rounded-pill bg-primary" style={{ width: '50%' }}></div>
+              <div className="mt-auto">
+                <div className="d-flex justify-content-between small text-muted mb-1">
+                  <span>Phase Compliance Completion</span>
+                  <span className="fw-bold text-dark">50%</span>
+                </div>
+                <div className="progress" style={{ height: 8, background: '#E2E8F0' }}>
+                  <div className="progress-bar bg-primary" style={{ width: '50%' }}></div>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Row: Skill Breakdown Chart & AI Mentor Advice */}
+      {/* Row: Official Competency Matrix & Ministry Advisory */}
       <div className="row g-4 mb-4">
-        {/* Skills Proficiency Chart */}
+        {/* Skills Competency Matrix */}
         <div className="col-lg-7">
-          <div className="card mac-card p-4 h-100">
-            <div className="d-flex justify-content-between align-items-center mb-3">
-              <h5 className="fw-bold mb-0">Skill Proficiency Breakdown</h5>
-              <Link to="/profile" className="small text-primary text-decoration-none fw-semibold">
-                Manage Skills <i className="bi bi-arrow-right"></i>
+          <div className="card border bg-white h-100 shadow-sm">
+            <div className="p-3 px-4 border-bottom bg-light d-flex justify-content-between align-items-center">
+              <h6 className="fw-bold mb-0 text-dark">National Technical Competency Matrix</h6>
+              <Link to="/profile" className="small text-primary text-decoration-none fw-bold">
+                Update Records <i className="bi bi-arrow-right"></i>
               </Link>
             </div>
 
-            <div style={{ height: 250, width: '100%' }}>
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={skillsChartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke={isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.05)'} />
-                  <XAxis dataKey="name" tick={{ fontSize: 12, fill: isDark ? '#A1A1A6' : '#6E6E73' }} axisLine={false} tickLine={false} />
-                  <YAxis domain={[0, 100]} tick={{ fontSize: 12, fill: isDark ? '#A1A1A6' : '#6E6E73' }} axisLine={false} tickLine={false} />
-                  <Tooltip
-                    contentStyle={{
-                      borderRadius: 12,
-                      border: '1px solid var(--mac-border)',
-                      backgroundColor: isDark ? '#1E1E22' : '#FFFFFF',
-                      color: isDark ? '#F5F5F7' : '#1D1D1F',
-                      fontSize: 12,
-                      boxShadow: '0 8px 24px rgba(0,0,0,0.15)',
-                    }}
-                    formatter={(val) => [`${val}%`, 'Proficiency Score']}
-                  />
-                  <Bar dataKey="score" fill="var(--mac-blue)" radius={[8, 8, 2, 2]} />
-                </BarChart>
-              </ResponsiveContainer>
+            <div className="card-body p-4">
+              <div style={{ height: 250, width: '100%' }}>
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={skillsChartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E2E8F0" />
+                    <XAxis dataKey="name" tick={{ fontSize: 12, fill: '#475569' }} />
+                    <YAxis domain={[0, 100]} tick={{ fontSize: 12, fill: '#475569' }} />
+                    <Tooltip
+                      contentStyle={{ borderRadius: 6, border: '1px solid #CBD5E1', fontSize: 12 }}
+                      formatter={(val) => [`${val}%`, 'Competency Score']}
+                    />
+                    <Bar dataKey="score" fill="#0F2C59" radius={[4, 4, 0, 0]} />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
             </div>
           </div>
         </div>
 
-        {/* Personalized AI Mentor Advice & Action Checklist */}
+        {/* Ministry Career Advisory & Directives */}
         <div className="col-lg-5">
-          <div className="card mac-card p-4 h-100">
-            <div className="d-flex align-items-center justify-content-between mb-3">
+          <div className="card border bg-white h-100 shadow-sm">
+            <div className="p-3 px-4 border-bottom bg-light d-flex align-items-center justify-content-between">
               <div className="d-flex align-items-center gap-2">
-                <div
-                  className="rounded-3 d-flex align-items-center justify-content-center text-white"
-                  style={{
-                    width: 32,
-                    height: 32,
-                    background: 'linear-gradient(135deg, #0071E3 0%, #5856D6 100%)',
-                  }}
-                >
-                  <i className="bi bi-robot fs-6"></i>
-                </div>
-                <h5 className="fw-bold mb-0">AI Mentor Advice</h5>
+                <i className="bi bi-robot text-primary fs-5"></i>
+                <h6 className="fw-bold mb-0 text-dark">Ministry AI Career Advisory</h6>
               </div>
-              <span className="ai-badge">
-                <span className="ai-pulse-dot"></span>
-                <span>Active</span>
-              </span>
+              <span className="badge bg-success text-white">Active</span>
             </div>
 
-            <div
-              className="p-3 rounded-3 mb-3"
-              style={{
-                background: 'rgba(0, 113, 227, 0.06)',
-                border: '1px solid rgba(0, 113, 227, 0.15)',
-              }}
-            >
-              <p className="small mb-0" style={{ lineHeight: 1.55 }}>
-                "Solid progress on React components! In alignment with your goal of <strong>{targetCareerTitle}</strong>, your highest-yield priority right now is <strong>Node.js REST API Architecture</strong>. Connecting with peer <strong>Maya Chen</strong> will accelerate this phase."
-              </p>
-            </div>
+            <div className="card-body p-4">
+              <div className="p-3 rounded-2 bg-light border mb-3">
+                <p className="small text-secondary mb-0" style={{ lineHeight: 1.55 }}>
+                  "Candidate has established verified proficiency in frontend state composing. In adherence to National Framework benchmarks for <strong>{targetCareerTitle}</strong>, priority recommendation is completion of <strong>Node.js Server Architecture Unit</strong>."
+                </p>
+              </div>
 
-            <h6 className="fw-bold small text-uppercase mb-2 text-secondary" style={{ letterSpacing: '0.04em', fontSize: '0.72rem' }}>
-              Recommended Next Actions
-            </h6>
-            <div className="d-flex flex-column gap-2">
-              <Link
-                to="/assessment"
-                className="d-flex align-items-center justify-content-between p-2.5 rounded-3 text-decoration-none card-hover"
-                style={{ background: 'var(--mac-surface)', border: '1px solid var(--mac-border)', color: 'var(--mac-text-primary)' }}
-              >
-                <div className="d-flex align-items-center gap-2 small">
-                  <i className="bi bi-patch-check text-primary fs-6"></i>
-                  <span className="fw-medium">Take JavaScript Core Assessment</span>
-                </div>
-                <i className="bi bi-chevron-right text-secondary small"></i>
-              </Link>
+              <h6 className="fw-bold text-dark small text-uppercase mb-2" style={{ letterSpacing: '0.04em', fontSize: '0.72rem' }}>
+                Prescribed Candidate Actions
+              </h6>
+              <div className="d-flex flex-column gap-2">
+                <Link to="/assessment" className="d-flex align-items-center justify-content-between p-2.5 rounded-2 border bg-white text-decoration-none text-dark">
+                  <div className="d-flex align-items-center gap-2 small">
+                    <i className="bi bi-patch-check text-primary"></i>
+                    <span>Take JavaScript Core Certification Exam</span>
+                  </div>
+                  <i className="bi bi-chevron-right text-muted small"></i>
+                </Link>
 
-              <Link
-                to="/peers"
-                className="d-flex align-items-center justify-content-between p-2.5 rounded-3 text-decoration-none card-hover"
-                style={{ background: 'var(--mac-surface)', border: '1px solid var(--mac-border)', color: 'var(--mac-text-primary)' }}
-              >
-                <div className="d-flex align-items-center gap-2 small">
-                  <i className="bi bi-person-plus text-success fs-6"></i>
-                  <span className="fw-medium">Connect with Maya Chen (94% Match)</span>
-                </div>
-                <i className="bi bi-chevron-right text-secondary small"></i>
-              </Link>
+                <Link to="/peers" className="d-flex align-items-center justify-content-between p-2.5 rounded-2 border bg-white text-decoration-none text-dark">
+                  <div className="d-flex align-items-center gap-2 small">
+                    <i className="bi bi-person-plus text-success"></i>
+                    <span>Connect with Peer Maya Chen (94% Compatibility)</span>
+                  </div>
+                  <i className="bi bi-chevron-right text-muted small"></i>
+                </Link>
 
-              <Link
-                to="/interviews"
-                className="d-flex align-items-center justify-content-between p-2.5 rounded-3 text-decoration-none card-hover"
-                style={{ background: 'var(--mac-surface)', border: '1px solid var(--mac-border)', color: 'var(--mac-text-primary)' }}
-              >
-                <div className="d-flex align-items-center gap-2 small">
-                  <i className="bi bi-mic text-warning fs-6"></i>
-                  <span className="fw-medium">Practice Technical Mock Interview</span>
-                </div>
-                <i className="bi bi-chevron-right text-secondary small"></i>
-              </Link>
+                <Link to="/interviews" className="d-flex align-items-center justify-content-between p-2.5 rounded-2 border bg-white text-decoration-none text-dark">
+                  <div className="d-flex align-items-center gap-2 small">
+                    <i className="bi bi-mic text-warning"></i>
+                    <span>Enter Examination Chamber (Technical Board)</span>
+                  </div>
+                  <i className="bi bi-chevron-right text-muted small"></i>
+                </Link>
+              </div>
             </div>
           </div>
         </div>

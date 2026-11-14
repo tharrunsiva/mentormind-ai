@@ -1,390 +1,229 @@
 /* ==========================================================================
-   MentorMind AI - macOS Tahoe / Sonoma Glassmorphism Design System
+   MentorMind AI - National Government Career & Skill Intelligence Portal
+   Official Digital Public Infrastructure Design System (GovDS / NCS / USWDS)
    ========================================================================== */
 
 :root {
-  /* macOS Cupertino Color Palette - Light Mode */
-  --mac-canvas: #F5F5F7;
-  --mac-surface: rgba(255, 255, 255, 0.82);
-  --mac-surface-elevated: #FFFFFF;
-  --mac-surface-opaque: #FFFFFF;
-  --mac-sidebar-bg: rgba(246, 246, 248, 0.82);
-  --mac-topbar-bg: rgba(255, 255, 255, 0.75);
+  /* Official Government Color Palette (Deep Navy, Sovereign Saffron/Gold, Gov Green) */
+  --gov-navy-dark: #0A192F;
+  --gov-navy: #0F2C59;
+  --gov-navy-light: #1E3A8A;
+  --gov-navy-surface: #F0F4F8;
   
-  --mac-text-primary: #1D1D1F;
-  --mac-text-secondary: #6E6E73;
-  --mac-text-tertiary: #86868B;
-  
-  --mac-border: rgba(0, 0, 0, 0.08);
-  --mac-border-subtle: rgba(0, 0, 0, 0.04);
-  --mac-inner-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9);
-  
-  /* Apple Accents */
-  --mac-blue: #0071E3;
-  --mac-blue-hover: #0077ED;
-  --mac-blue-subtle: rgba(0, 113, 227, 0.1);
-  --mac-indigo: #5856D6;
-  --mac-purple: #AF52DE;
-  --mac-teal: #30B0C7;
-  --mac-green: #34C759;
-  --mac-green-subtle: rgba(52, 199, 89, 0.12);
-  --mac-yellow: #FF9F0A;
-  --mac-red: #FF3B30;
-  
-  /* Backward Compatibility Mappings */
-  --primary: #0071E3;
-  --primary-hover: #0077ED;
-  --primary-light: rgba(0, 113, 227, 0.08);
-  --secondary: #5856D6;
-  --accent: #30B0C7;
-  --accent-light: rgba(48, 176, 199, 0.1);
-  --bg-main: var(--mac-canvas);
-  --card-bg: var(--mac-surface-elevated);
-  --text-main: var(--mac-text-primary);
-  --text-muted: var(--mac-text-secondary);
-  --border-color: var(--mac-border);
-  --border-light: var(--mac-border-subtle);
-  --success: var(--mac-green);
-  --warning: var(--mac-yellow);
-  --danger: var(--mac-red);
+  --gov-saffron: #D97706;
+  --gov-saffron-light: #FEF3C7;
+  --gov-gold: #C59B27;
+  --gov-gold-subtle: rgba(197, 155, 39, 0.12);
 
-  /* Geometry & Radii */
-  --radius-xs: 6px;
-  --radius-sm: 10px;
-  --radius-md: 14px;
-  --radius-lg: 18px;
-  --radius-xl: 24px;
+  --gov-green: #15803D;
+  --gov-green-light: #DCFCE7;
+  --gov-green-dark: #166534;
+
+  --gov-red: #B91C1C;
+  --gov-red-light: #FEE2E2;
+
+  --gov-canvas: #F8FAFC;
+  --gov-surface: #FFFFFF;
+  --gov-surface-secondary: #F1F5F9;
+  
+  --gov-text-primary: #0F172A;
+  --gov-text-secondary: #475569;
+  --gov-text-muted: #64748B;
+  
+  --gov-border: #CBD5E1;
+  --gov-border-subtle: #E2E8F0;
+  --gov-border-dark: #94A3B8;
+
+  /* Standard Gov Mappings */
+  --primary: #0F2C59;
+  --primary-hover: #0A192F;
+  --primary-light: #EEF2FF;
+  --secondary: #1E3A8A;
+  --accent: #D97706;
+  --accent-light: #FEF3C7;
+  --bg-main: var(--gov-canvas);
+  --card-bg: var(--gov-surface);
+  --text-main: var(--gov-text-primary);
+  --text-muted: var(--gov-text-muted);
+  --border-color: var(--gov-border);
+  --border-light: var(--gov-border-subtle);
+  --success: var(--gov-green);
+  --warning: var(--gov-saffron);
+  --danger: var(--gov-red);
+
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
   --radius-pill: 9999px;
 
-  /* Layout Measurements */
-  --sidebar-width: 260px;
-  --sidebar-collapsed-width: 78px;
-  --topbar-height: 64px;
+  --sidebar-width: 270px;
+  --sidebar-collapsed-width: 80px;
+  --topbar-height: 72px;
 
-  /* macOS Smooth Shadows */
-  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02);
-  --shadow-md: 0 4px 16px -2px rgba(0, 0, 0, 0.05), 0 2px 6px -1px rgba(0, 0, 0, 0.03);
-  --shadow-lg: 0 16px 36px -6px rgba(0, 0, 0, 0.08), 0 4px 12px -2px rgba(0, 0, 0, 0.03);
-  --shadow-glass: inset 0 1px 0 rgba(255, 255, 255, 0.8), 0 8px 32px 0 rgba(0, 0, 0, 0.06);
-
-  /* Blur settings */
-  --glass-blur: blur(24px) saturate(190%);
+  --gov-shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.05);
+  --gov-shadow-md: 0 4px 6px -1px rgba(15, 23, 42, 0.07), 0 2px 4px -2px rgba(15, 23, 42, 0.05);
+  --gov-shadow-lg: 0 10px 15px -3px rgba(15, 23, 42, 0.08), 0 4px 6px -4px rgba(15, 23, 42, 0.04);
 }
 
 /* ==========================================================================
-   macOS Dark Mode Theme (Tahoe / Sonoma Deep Graphite)
-   ========================================================================== */
-[data-theme="dark"] {
-  --mac-canvas: #161618;
-  --mac-surface: rgba(30, 30, 34, 0.82);
-  --mac-surface-elevated: #1E1E22;
-  --mac-surface-opaque: #1E1E22;
-  --mac-sidebar-bg: rgba(22, 22, 25, 0.88);
-  --mac-topbar-bg: rgba(26, 26, 30, 0.82);
-
-  --mac-text-primary: #F5F5F7;
-  --mac-text-secondary: #A1A1A6;
-  --mac-text-tertiary: #6E6E73;
-
-  --mac-border: rgba(255, 255, 255, 0.09);
-  --mac-border-subtle: rgba(255, 255, 255, 0.05);
-  --mac-inner-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
-
-  --mac-blue: #0A84FF;
-  --mac-blue-hover: #409CFF;
-  --mac-blue-subtle: rgba(10, 132, 255, 0.15);
-  --mac-indigo: #5E5CE6;
-  --mac-purple: #BF5AF2;
-  --mac-teal: #64D2FF;
-  --mac-green: #30D158;
-  --mac-green-subtle: rgba(48, 209, 88, 0.15);
-  --mac-yellow: #FFD60A;
-  --mac-red: #FF453A;
-
-  --primary: #0A84FF;
-  --primary-hover: #409CFF;
-  --primary-light: rgba(10, 132, 255, 0.15);
-  --secondary: #5E5CE6;
-  --accent: #64D2FF;
-  --accent-light: rgba(100, 210, 255, 0.12);
-  --bg-main: var(--mac-canvas);
-  --card-bg: var(--mac-surface-elevated);
-  --text-main: var(--mac-text-primary);
-  --text-muted: var(--mac-text-secondary);
-  --border-color: var(--mac-border);
-  --border-light: var(--mac-border-subtle);
-  --success: var(--mac-green);
-  --warning: var(--mac-yellow);
-  --danger: var(--mac-red);
-
-  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
-  --shadow-md: 0 6px 20px -2px rgba(0, 0, 0, 0.45), 0 2px 6px -1px rgba(0, 0, 0, 0.3);
-  --shadow-lg: 0 20px 48px -6px rgba(0, 0, 0, 0.6), 0 6px 16px -2px rgba(0, 0, 0, 0.4);
-  --shadow-glass: inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 8px 32px 0 rgba(0, 0, 0, 0.45);
-}
-
-/* ==========================================================================
-   Typography & Base Reset
+   Typography & Formal Grid
    ========================================================================== */
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Inter", "Helvetica Neue", system-ui, sans-serif;
-  background-color: var(--mac-canvas);
-  color: var(--mac-text-primary);
+  font-family: "Public Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  background-color: var(--gov-canvas);
+  color: var(--gov-text-primary);
   margin: 0;
   padding: 0;
+  font-size: 15px;
+  line-height: 1.6;
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  transition: background-color 0.3s ease, color 0.3s ease;
-  overflow-x: hidden;
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Inter", sans-serif;
+  font-family: "Public Sans", "Segoe UI", Roboto, sans-serif;
   font-weight: 700;
-  color: var(--mac-text-primary);
-  letter-spacing: -0.025em;
+  color: var(--gov-navy-dark);
+  letter-spacing: -0.015em;
 }
 
-code, pre {
-  font-family: "SF Mono", "Menlo", "Monaco", "Consolas", monospace;
-  font-size: 0.88rem;
+/* National Tricolor Top Ribbon */
+.gov-top-tricolor {
+  height: 4px;
+  width: 100%;
+  background: linear-gradient(90deg, #FF9933 0%, #FF9933 33.3%, #FFFFFF 33.3%, #FFFFFF 66.6%, #138808 66.6%, #138808 100%);
+  position: relative;
+  z-index: 1000;
 }
 
-/* Custom macOS Slim Scrollbar */
-::-webkit-scrollbar {
-  width: 7px;
-  height: 7px;
-}
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-::-webkit-scrollbar-thumb {
-  background: rgba(140, 140, 150, 0.35);
-  border-radius: 9999px;
-  border: 1px solid transparent;
-  background-clip: padding-box;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: rgba(140, 140, 150, 0.6);
+/* Official Government Portal Banner (Top Ribbon Bar) */
+.gov-portal-banner {
+  background: #0A192F;
+  color: #E2E8F0;
+  font-size: 0.75rem;
+  padding: 0.35rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-/* ==========================================================================
-   macOS Window Traffic Lights
-   ========================================================================== */
-.mac-traffic-lights {
+.gov-portal-banner a {
+  color: #93C5FD;
+  text-decoration: none;
+}
+.gov-portal-banner a:hover {
+  text-decoration: underline;
+}
+
+/* Official Verification Stamp */
+.gov-seal-badge {
   display: inline-flex;
   align-items: center;
-  gap: 7px;
+  gap: 0.45rem;
+  background: #FEF3C7;
+  color: #92400E;
+  border: 1px solid #F59E0B;
+  border-radius: var(--radius-sm);
+  padding: 0.35rem 0.75rem;
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
 }
-.mac-traffic-dot {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
+
+.gov-verified-pill {
   display: inline-flex;
   align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: transform 0.15s cubic-bezier(0.16, 1, 0.3, 1), filter 0.15s ease;
-  position: relative;
-}
-.mac-traffic-dot:hover {
-  transform: scale(1.12);
-  filter: brightness(0.92);
-}
-.mac-traffic-close {
-  background-color: #FF5F56;
-  border: 0.5px solid rgba(0, 0, 0, 0.15);
-}
-.mac-traffic-minimize {
-  background-color: #FFBD2E;
-  border: 0.5px solid rgba(0, 0, 0, 0.15);
-}
-.mac-traffic-zoom {
-  background-color: #27C93F;
-  border: 0.5px solid rgba(0, 0, 0, 0.15);
+  gap: 0.35rem;
+  background: #DCFCE7;
+  color: #166534;
+  border: 1px solid #86EFAC;
+  border-radius: var(--radius-pill);
+  padding: 0.25rem 0.65rem;
+  font-size: 0.72rem;
+  font-weight: 700;
 }
 
-/* ==========================================================================
-   macOS Frosted Glass Cards
-   ========================================================================== */
-.card, .mac-card {
-  background: var(--mac-surface);
-  backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur);
-  border: 1px solid var(--mac-border);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-sm);
-  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.28s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s ease;
-  overflow: hidden;
-  position: relative;
+/* Official Government Cards */
+.card, .gov-card {
+  background: var(--gov-surface);
+  border: 1px solid var(--gov-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--gov-shadow-sm);
+  transition: box-shadow 0.2s ease, border-color 0.2s ease;
 }
 
-.card::before, .mac-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
-  pointer-events: none;
+.card:hover, .gov-card:hover {
+  border-color: var(--gov-border-dark);
+  box-shadow: var(--gov-shadow-md);
 }
 
-.card-hover:hover, .mac-card-hover:hover {
-  transform: translateY(-4px) scale(1.004);
-  box-shadow: var(--shadow-lg);
-  border-color: rgba(0, 113, 227, 0.28);
+.card-header-gov {
+  background: var(--gov-navy);
+  color: #FFFFFF;
+  padding: 0.85rem 1.25rem;
+  border-radius: calc(var(--radius-md) - 1px) calc(var(--radius-md) - 1px) 0 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
-.card-body {
-  padding: 1.5rem;
+.card-header-gov h5, .card-header-gov h6 {
+  color: #FFFFFF !important;
+  margin: 0;
 }
 
-/* ==========================================================================
-   macOS Buttons & Segmented Controls
-   ========================================================================== */
-.btn-primary, .mac-btn-primary {
-  background: var(--mac-blue);
-  background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.15) 0%, rgba(0, 0, 0, 0.05) 100%);
-  border: 1px solid rgba(0, 0, 0, 0.12);
+/* Official Buttons */
+.btn-primary {
+  background-color: var(--gov-navy);
+  border-color: var(--gov-navy);
   color: #FFFFFF;
   font-weight: 600;
-  font-size: 0.92rem;
+  font-size: 0.9rem;
+  padding: 0.55rem 1.25rem;
   border-radius: var(--radius-sm);
-  padding: 0.6rem 1.25rem;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.25);
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-}
-
-.btn-primary:hover, .btn-primary:focus, .mac-btn-primary:hover {
-  background: var(--mac-blue-hover);
-  border-color: rgba(0, 0, 0, 0.15);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 14px rgba(0, 113, 227, 0.32), inset 0 1px 0 rgba(255, 255, 255, 0.3);
-}
-
-.btn-primary:active, .mac-btn-primary:active {
-  transform: scale(0.975);
-}
-
-.btn-outline-primary, .mac-btn-secondary {
-  background: var(--mac-surface);
-  backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur);
-  color: var(--mac-text-primary);
-  border: 1px solid var(--mac-border);
-  font-weight: 500;
-  font-size: 0.92rem;
-  border-radius: var(--radius-sm);
-  padding: 0.6rem 1.25rem;
-  box-shadow: var(--shadow-sm);
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.btn-outline-primary:hover, .mac-btn-secondary:hover {
-  background: var(--mac-blue-subtle);
-  border-color: var(--mac-blue);
-  color: var(--mac-blue);
-  transform: translateY(-1px);
-}
-
-.btn-outline-primary:active, .mac-btn-secondary:active {
-  transform: scale(0.975);
-}
-
-/* macOS Pill Segmented Control */
-.mac-segmented {
-  display: inline-flex;
-  background: rgba(140, 140, 150, 0.12);
-  padding: 3px;
-  border-radius: var(--radius-pill);
-  gap: 3px;
-}
-
-.mac-segmented-item {
-  border: none;
-  background: transparent;
-  color: var(--mac-text-secondary);
-  font-size: 0.85rem;
-  font-weight: 600;
-  padding: 0.4rem 1rem;
-  border-radius: var(--radius-pill);
+  box-shadow: var(--gov-shadow-sm);
   transition: all 0.2s ease;
-  cursor: pointer;
-}
-
-.mac-segmented-item.active {
-  background: var(--mac-surface-elevated);
-  color: var(--mac-text-primary);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.04);
-}
-
-/* ==========================================================================
-   macOS AI Glowing Badges & Shimmer
-   ========================================================================== */
-.ai-badge {
-  background: linear-gradient(135deg, rgba(0, 113, 227, 0.12) 0%, rgba(94, 92, 230, 0.15) 100%);
-  color: var(--mac-blue);
-  border: 1px solid rgba(0, 113, 227, 0.22);
-  border-radius: var(--radius-pill);
-  padding: 0.35rem 0.8rem;
-  font-size: 0.76rem;
-  font-weight: 600;
   display: inline-flex;
   align-items: center;
-  gap: 0.4rem;
-  letter-spacing: -0.01em;
-  box-shadow: 0 2px 8px rgba(0, 113, 227, 0.08);
+  gap: 0.45rem;
 }
 
-[data-theme="dark"] .ai-badge {
-  background: linear-gradient(135deg, rgba(10, 132, 255, 0.18) 0%, rgba(94, 92, 230, 0.22) 100%);
-  color: #64D2FF;
-  border-color: rgba(100, 210, 255, 0.25);
-  box-shadow: 0 2px 12px rgba(10, 132, 255, 0.15);
+.btn-primary:hover, .btn-primary:focus {
+  background-color: var(--gov-navy-dark);
+  border-color: var(--gov-navy-dark);
+  color: #FFFFFF;
+  box-shadow: var(--gov-shadow-md);
 }
 
-.ai-pulse-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background-color: var(--mac-green);
-  box-shadow: 0 0 0 0 rgba(52, 199, 89, 0.7);
-  animation: macAIPulse 2s infinite cubic-bezier(0.66, 0, 0, 1);
+.btn-outline-primary {
+  color: var(--gov-navy);
+  border: 1.5px solid var(--gov-navy);
+  background: #FFFFFF;
+  font-weight: 600;
+  font-size: 0.9rem;
+  padding: 0.55rem 1.25rem;
+  border-radius: var(--radius-sm);
+  transition: all 0.2s ease;
 }
 
-@keyframes macAIPulse {
-  0% {
-    box-shadow: 0 0 0 0 rgba(52, 199, 89, 0.7);
-  }
-  70% {
-    box-shadow: 0 0 0 7px rgba(52, 199, 89, 0);
-  }
-  100% {
-    box-shadow: 0 0 0 0 rgba(52, 199, 89, 0);
-  }
+.btn-outline-primary:hover {
+  background: var(--gov-navy);
+  color: #FFFFFF;
 }
 
-/* ==========================================================================
-   macOS Dashboard Layout Shell
-   ========================================================================== */
+/* Official Government Navigation Shell */
 .app-container {
   display: flex;
   min-height: 100vh;
-  background-color: var(--mac-canvas);
-  transition: background-color 0.3s ease;
+  background-color: var(--gov-canvas);
 }
 
 .app-sidebar {
   width: var(--sidebar-width);
-  background: var(--mac-sidebar-bg);
-  backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur);
-  border-right: 1px solid var(--mac-border);
+  background: var(--gov-navy-dark);
+  border-right: 1px solid #1E293B;
   position: fixed;
   top: 0;
   bottom: 0;
@@ -392,7 +231,8 @@ code, pre {
   z-index: 100;
   display: flex;
   flex-direction: column;
-  transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1), transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: width 0.25s ease, transform 0.25s ease;
+  color: #E2E8F0;
 }
 
 .app-sidebar.collapsed {
@@ -401,17 +241,19 @@ code, pre {
 
 .app-sidebar.collapsed .sidebar-text,
 .app-sidebar.collapsed .badge-count,
-.app-sidebar.collapsed .nav-section-title {
+.app-sidebar.collapsed .nav-section-title,
+.app-sidebar.collapsed .gov-official-tag {
   display: none !important;
 }
 
 .sidebar-header {
   height: var(--topbar-height);
   display: flex;
-  flex-direction: column;
-  justify-content: center;
+  align-items: center;
+  justify-content: space-between;
   padding: 0 1.25rem;
-  border-bottom: 1px solid var(--mac-border);
+  background: #061120;
+  border-bottom: 2px solid var(--gov-gold);
 }
 
 .sidebar-nav {
@@ -423,50 +265,48 @@ code, pre {
 .nav-section-title {
   font-size: 0.68rem;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--mac-text-tertiary);
-  font-weight: 700;
-  padding: 0.65rem 0.75rem 0.25rem;
+  letter-spacing: 0.08em;
+  color: #94A3B8;
+  font-weight: 800;
+  padding: 0.75rem 0.75rem 0.35rem;
 }
 
 .sidebar-link {
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  padding: 0.58rem 0.8rem;
-  color: var(--mac-text-secondary);
+  padding: 0.62rem 0.85rem;
+  color: #CBD5E1;
   text-decoration: none;
   font-weight: 500;
   font-size: 0.88rem;
   border-radius: var(--radius-sm);
-  transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
-  margin-bottom: 0.15rem;
-  position: relative;
+  transition: all 0.15s ease;
+  margin-bottom: 0.2rem;
+  border-left: 3px solid transparent;
 }
 
 .sidebar-link:hover {
-  background-color: rgba(140, 140, 150, 0.1);
-  color: var(--mac-text-primary);
-  transform: translateX(2px);
+  background-color: rgba(255, 255, 255, 0.08);
+  color: #FFFFFF;
 }
 
 .sidebar-link.active {
-  background: var(--mac-blue);
+  background: rgba(255, 255, 255, 0.12);
   color: #FFFFFF;
-  font-weight: 600;
-  box-shadow: 0 2px 8px rgba(0, 113, 227, 0.25);
-}
-
-.sidebar-link.active i {
-  color: #FFFFFF !important;
+  font-weight: 700;
+  border-left: 3px solid var(--gov-gold);
 }
 
 .sidebar-link i {
   font-size: 1.1rem;
-  width: 20px;
+  width: 22px;
   text-align: center;
-  color: var(--mac-text-secondary);
-  transition: color 0.18s ease;
+  color: #94A3B8;
+}
+
+.sidebar-link.active i {
+  color: var(--gov-gold) !important;
 }
 
 .main-content-wrapper {
@@ -475,7 +315,7 @@ code, pre {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  transition: margin-left 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: margin-left 0.25s ease;
 }
 
 .main-content-wrapper.expanded {
@@ -484,10 +324,8 @@ code, pre {
 
 .app-topbar {
   height: var(--topbar-height);
-  background: var(--mac-topbar-bg);
-  backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur);
-  border-bottom: 1px solid var(--mac-border);
+  background: #FFFFFF;
+  border-bottom: 2px solid var(--gov-border);
   position: sticky;
   top: 0;
   z-index: 90;
@@ -495,189 +333,78 @@ code, pre {
   align-items: center;
   justify-content: space-between;
   padding: 0 2rem;
-  transition: background-color 0.3s ease, border-color 0.3s ease;
+  box-shadow: var(--gov-shadow-sm);
 }
 
 .page-content {
-  padding: 2.25rem 2.5rem;
+  padding: 2rem 2.25rem;
   flex: 1;
-  animation: macFadeSlideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-@keyframes macFadeSlideUp {
-  0% {
-    opacity: 0;
-    transform: translateY(8px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* ==========================================================================
-   macOS Spotlight-style Search Input & Cmd+K Pill
-   ========================================================================== */
-.mac-search-capsule {
-  position: relative;
-  width: 320px;
-}
-
-.mac-search-input {
-  background: rgba(140, 140, 150, 0.1);
-  border: 1px solid transparent;
-  color: var(--mac-text-primary);
-  border-radius: var(--radius-pill);
-  font-size: 0.88rem;
-  padding: 0.45rem 3rem 0.45rem 2.4rem;
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-  width: 100%;
-}
-
-.mac-search-input:focus {
-  background: var(--mac-surface-elevated);
-  border-color: var(--mac-blue);
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.25);
-  color: var(--mac-text-primary);
-}
-
-.mac-kbd-shortcut {
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
-  font-size: 0.72rem;
-  font-weight: 600;
-  padding: 0.15rem 0.45rem;
-  background: rgba(140, 140, 150, 0.2);
-  color: var(--mac-text-secondary);
-  border-radius: 5px;
-  border: 1px solid var(--mac-border);
-}
-
-/* ==========================================================================
-   macOS Control Center Theme Toggle
-   ========================================================================== */
-.mac-theme-toggle {
-  width: 40px;
-  height: 40px;
-  border-radius: var(--radius-pill);
-  background: rgba(140, 140, 150, 0.1);
-  border: 1px solid var(--mac-border);
-  color: var(--mac-text-primary);
+/* Official Government Announcement Banner Ticker */
+.gov-announcement-ticker {
+  background: #FEF3C7;
+  border-bottom: 1px solid #FDE68A;
+  color: #92400E;
+  padding: 0.5rem 2rem;
+  font-size: 0.82rem;
   display: flex;
   align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  gap: 0.75rem;
 }
 
-.mac-theme-toggle:hover {
-  background: rgba(140, 140, 150, 0.2);
-  transform: scale(1.06);
-}
-
-.mac-theme-toggle:active {
-  transform: scale(0.95);
-}
-
-/* ==========================================================================
-   macOS Messages Style Chat Bubbles
-   ========================================================================== */
-.chat-bubble-user {
-  background: var(--mac-blue);
+.gov-ticker-badge {
+  background: #D97706;
   color: #FFFFFF;
-  border-radius: 18px 18px 4px 18px;
-  padding: 0.85rem 1.15rem;
-  max-width: 78%;
-  box-shadow: 0 2px 8px rgba(0, 113, 227, 0.25);
-  font-size: 0.94rem;
-  line-height: 1.5;
+  font-weight: 800;
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  padding: 0.2rem 0.5rem;
+  border-radius: var(--radius-xs);
+  letter-spacing: 0.04em;
+  flex-shrink: 0;
 }
 
-.chat-bubble-assistant {
-  background: var(--mac-surface-elevated);
-  color: var(--mac-text-primary);
-  border: 1px solid var(--mac-border);
-  border-radius: 18px 18px 18px 4px;
-  padding: 1.15rem 1.35rem;
-  max-width: 82%;
-  box-shadow: var(--shadow-sm);
-  font-size: 0.94rem;
-  line-height: 1.55;
-}
-
-/* macOS FaceTime Style Interview Room Viewfinder */
-.mac-facetime-frame {
-  background: #000000;
-  border-radius: var(--radius-xl);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+/* Official National Dossier Table */
+.gov-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  border: 1px solid var(--gov-border);
+  border-radius: var(--radius-md);
   overflow: hidden;
-  position: relative;
-  box-shadow: var(--shadow-lg);
+  background: #FFFFFF;
 }
 
-.mac-facetime-glass-header {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  padding: 0.85rem 1.25rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: linear-gradient(180deg, rgba(0, 0, 0, 0.6) 0%, transparent 100%);
-  z-index: 10;
+.gov-table th {
+  background: var(--gov-navy-surface);
+  color: var(--gov-navy-dark);
+  font-weight: 700;
+  font-size: 0.82rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0.85rem 1rem;
+  border-bottom: 1px solid var(--gov-border);
 }
 
-/* Audio Visualizer Wave */
-.mac-audio-wave {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  height: 24px;
+.gov-table td {
+  padding: 0.85rem 1rem;
+  border-bottom: 1px solid var(--gov-border-subtle);
+  font-size: 0.88rem;
 }
 
-.mac-audio-bar {
-  width: 3px;
-  background: var(--mac-blue);
-  border-radius: 9999px;
-  animation: macAudioPulse 1.2s ease-in-out infinite alternate;
+.gov-table tr:last-child td {
+  border-bottom: none;
 }
 
-.mac-audio-bar:nth-child(1) { height: 8px; animation-delay: 0.1s; }
-.mac-audio-bar:nth-child(2) { height: 18px; animation-delay: 0.3s; }
-.mac-audio-bar:nth-child(3) { height: 24px; animation-delay: 0.5s; }
-.mac-audio-bar:nth-child(4) { height: 14px; animation-delay: 0.2s; }
-.mac-audio-bar:nth-child(5) { height: 10px; animation-delay: 0.4s; }
-
-@keyframes macAudioPulse {
-  0% { transform: scaleY(0.4); }
-  100% { transform: scaleY(1); }
+.gov-table tr:hover td {
+  background: #F8FAFC;
 }
 
-/* ==========================================================================
-   macOS Activity Ring / Progress Circle
-   ========================================================================== */
-.mac-progress-ring {
-  transform: rotate(-90deg);
-  transform-origin: 50% 50%;
-}
-
-.mac-progress-circle-bg {
-  stroke: rgba(140, 140, 150, 0.15);
-}
-
-.mac-progress-circle {
-  stroke: var(--mac-blue);
-  stroke-linecap: round;
-  transition: stroke-dashoffset 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-/* ==========================================================================
-   High-Contrast Accessibility Focus States
-   ========================================================================== */
+/* Accessible Focus Ring */
 :focus-visible {
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.4) !important;
+  outline: 2px solid #0F2C59 !important;
+  outline-offset: 2px;
 }
 
 /* Responsive Overrides */
@@ -687,7 +414,7 @@ code, pre {
   }
   .app-sidebar.show-mobile {
     transform: translateX(0);
-    box-shadow: var(--shadow-lg);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
   }
   .main-content-wrapper {
     margin-left: 0 !important;
@@ -697,5 +424,11 @@ code, pre {
   }
   .app-topbar {
     padding: 0 1rem;
+  }
+  .gov-portal-banner {
+    padding: 0.35rem 1rem;
+  }
+  .gov-announcement-ticker {
+    padding: 0.5rem 1rem;
   }
 }

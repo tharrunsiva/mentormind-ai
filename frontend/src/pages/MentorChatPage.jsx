@@ -1,11 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { mentorAPI } from '../services/api';
 import { useAuth } from '../context/AuthContext';
-import { useTheme } from '../context/ThemeContext';
 
 const MentorChatPage = () => {
   const { user, profile } = useAuth();
-  const { isDark } = useTheme();
   const [conversations, setConversations] = useState([]);
   const [activeConversationId, setActiveConversationId] = useState(null);
   const [messages, setMessages] = useState([]);
@@ -59,7 +57,6 @@ const MentorChatPage = () => {
     setInputMessage('');
     setSending(true);
 
-    // Optimistically add user message
     const tempUserMsg = {
       _id: 'temp-' + Date.now(),
       sender: 'user',
@@ -93,21 +90,23 @@ const MentorChatPage = () => {
   };
 
   const suggestedPrompts = [
-    'What should I learn today?',
-    'Explain React hooks in simple terms.',
-    'Give me a practical coding challenge.',
-    'Explain the difference between SQL and MongoDB.',
-    'How do I prepare for Full Stack technical interviews?',
+    'What are the mandatory competencies for Full Stack Developer?',
+    'Explain React state composition vs Redux in architectural terms.',
+    'Provide a standard algorithmic challenge for technical assessment.',
+    'How do I benchmark my readiness for Ministry technical examinations?',
   ];
 
   return (
-    <div className="fade-in">
-      {/* Header */}
+    <div>
       <div className="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
         <div>
-          <h3 className="fw-bold mb-1" style={{ letterSpacing: '-0.02em' }}>Personal AI Mentor</h3>
+          <div className="gov-seal-badge mb-1">
+            <i className="bi bi-shield-lock-fill"></i>
+            <span>Statutory Advisory Channel</span>
+          </div>
+          <h3 className="fw-bold text-dark mb-0">National AI Career Advisory Co-Pilot</h3>
           <p className="text-secondary small mb-0">
-            Context-aware career co-pilot calibrated to your skill gaps and roadmap
+            Automated technical guidance and curriculum advisory aligned with National Skill Standards
           </p>
         </div>
 
@@ -118,19 +117,19 @@ const MentorChatPage = () => {
             setMessages([]);
           }}
         >
-          <i className="bi bi-plus-lg"></i> New Session
+          <i className="bi bi-plus-lg"></i> New Consultation Thread
         </button>
       </div>
 
       <div className="row g-4">
-        {/* Chat Threads Sidebar - macOS Finder / Notes style */}
+        {/* Threads Sidebar */}
         <div className="col-lg-3 d-none d-lg-block">
-          <div className="card mac-card p-3 h-100 d-flex flex-column">
+          <div className="card border bg-white p-3 h-100 shadow-sm d-flex flex-column">
             <div className="d-flex align-items-center justify-content-between mb-3 px-1">
-              <span className="small text-secondary fw-bold text-uppercase" style={{ fontSize: '0.7rem', letterSpacing: '0.04em' }}>
-                Threads
+              <span className="small text-muted fw-bold text-uppercase" style={{ fontSize: '0.68rem', letterSpacing: '0.04em' }}>
+                Consultation Records
               </span>
-              <span className="badge rounded-pill bg-light text-secondary border small" style={{ fontSize: '0.68rem' }}>
+              <span className="badge bg-light text-secondary border small">
                 {conversations.length}
               </span>
             </div>
@@ -141,16 +140,13 @@ const MentorChatPage = () => {
                 return (
                   <button
                     key={conv._id}
-                    className="btn btn-sm text-start p-2.5 rounded-3 d-flex align-items-center gap-2 border-0"
-                    style={{
-                      background: isActive ? 'var(--mac-blue)' : 'transparent',
-                      color: isActive ? '#FFFFFF' : 'var(--mac-text-primary)',
-                      transition: 'all 0.18s ease',
-                    }}
+                    className={`btn btn-sm text-start p-2.5 rounded-2 d-flex align-items-center gap-2 border ${
+                      isActive ? 'btn-primary text-white' : 'btn-light text-secondary'
+                    }`}
                     onClick={() => setActiveConversationId(conv._id)}
                   >
-                    <i className={`bi bi-chat-left-text ${isActive ? 'text-white' : 'text-secondary'}`}></i>
-                    <span className="text-truncate flex-grow-1" style={{ fontSize: '0.82rem', fontWeight: isActive ? 600 : 500 }}>
+                    <i className="bi bi-chat-left-text"></i>
+                    <span className="text-truncate flex-grow-1" style={{ fontSize: '0.82rem' }}>
                       {conv.title}
                     </span>
                   </button>
@@ -158,89 +154,60 @@ const MentorChatPage = () => {
               })}
             </div>
 
-            {/* Learner Context Mini Card */}
-            <div className="mt-auto pt-3 border-top" style={{ borderColor: 'var(--mac-border)' }}>
-              <span className="small text-secondary d-block fw-bold text-uppercase mb-1" style={{ fontSize: '0.68rem', letterSpacing: '0.04em' }}>
-                Active Profile Context
+            <div className="mt-auto pt-3 border-top">
+              <span className="small text-muted d-block fw-bold text-uppercase mb-1" style={{ fontSize: '0.68rem' }}>
+                Active Candidate Record
               </span>
-              <div className="small fw-bold">{profile?.targetCareerName || 'Full Stack Developer'}</div>
+              <div className="small fw-bold text-dark">{profile?.targetCareerName || 'Full Stack Developer'}</div>
               <div className="small text-secondary" style={{ fontSize: '0.75rem' }}>
-                Readiness: {profile?.careerReadinessScore || 48}% • {profile?.existingTechnicalSkills?.length || 5} Skills Tracked
+                Readiness Index: {profile?.careerReadinessScore || 48}% • Certified Skills: {profile?.existingTechnicalSkills?.length || 5}
               </div>
             </div>
           </div>
         </div>
 
-        {/* Main Chat Interface - macOS Window Style */}
+        {/* Main Advisory Chamber */}
         <div className="col-lg-9">
-          <div className="card mac-card rounded-4 d-flex flex-column shadow-lg" style={{ height: 680 }}>
-            {/* macOS Window Titlebar with Traffic Lights */}
-            <div
-              className="p-3 px-4 border-bottom d-flex align-items-center justify-content-between"
-              style={{
-                borderColor: 'var(--mac-border)',
-                background: 'rgba(140, 140, 150, 0.04)',
-              }}
-            >
-              <div className="d-flex align-items-center gap-3">
-                <div className="mac-traffic-lights">
-                  <span className="mac-traffic-dot mac-traffic-close"></span>
-                  <span className="mac-traffic-dot mac-traffic-minimize"></span>
-                  <span className="mac-traffic-dot mac-traffic-zoom"></span>
+          <div className="card border bg-white rounded-3 d-flex flex-column shadow-sm" style={{ height: 680 }}>
+            <div className="p-3 px-4 border-bottom bg-light d-flex align-items-center justify-content-between">
+              <div className="d-flex align-items-center gap-2">
+                <div
+                  className="rounded-1 d-flex align-items-center justify-content-center text-white"
+                  style={{ width: 34, height: 34, background: '#0F2C59' }}
+                >
+                  <i className="bi bi-robot fs-5"></i>
                 </div>
-
-                <div className="d-flex align-items-center gap-2 ms-2">
-                  <div
-                    className="text-white rounded-3 d-flex align-items-center justify-content-center"
-                    style={{
-                      width: 28,
-                      height: 28,
-                      background: 'linear-gradient(135deg, #0071E3 0%, #5856D6 100%)',
-                    }}
-                  >
-                    <i className="bi bi-robot fs-6"></i>
-                  </div>
-                  <div>
-                    <h6 className="fw-bold mb-0" style={{ fontSize: '0.9rem' }}>MentorMind AI Co-Pilot</h6>
-                    <span className="small text-success d-flex align-items-center gap-1" style={{ fontSize: '0.72rem' }}>
-                      <span className="ai-pulse-dot" style={{ width: 6, height: 6 }}></span>
-                      Context Engine Synced
-                    </span>
-                  </div>
+                <div>
+                  <h6 className="fw-bold text-dark mb-0">Ministry AI Technical Co-Pilot</h6>
+                  <span className="small text-success d-flex align-items-center gap-1" style={{ fontSize: '0.72rem' }}>
+                    <span className="rounded-circle bg-success d-inline-block" style={{ width: 6, height: 6 }}></span>
+                    National Occupational Standard Agent Active
+                  </span>
                 </div>
               </div>
-
-              <div className="ai-badge">
-                <i className="bi bi-stars"></i>
-                <span>10 Specialized Agents</span>
-              </div>
+              <span className="badge bg-light text-dark border">Official Advisory Engine</span>
             </div>
 
-            {/* Messages Scroll Area */}
+            {/* Messages Area */}
             <div className="p-4 flex-grow-1 overflow-y-auto d-flex flex-column gap-3">
               {messages.length === 0 ? (
                 <div className="text-center my-auto py-4">
                   <div
                     className="rounded-circle d-inline-flex align-items-center justify-content-center p-3 mb-3"
-                    style={{
-                      width: 64,
-                      height: 64,
-                      background: 'rgba(0, 113, 227, 0.1)',
-                      color: 'var(--mac-blue)',
-                    }}
+                    style={{ width: 64, height: 64, background: '#EEF2FF', color: '#0F2C59' }}
                   >
                     <i className="bi bi-robot fs-2"></i>
                   </div>
-                  <h5 className="fw-bold">How can I guide your learning today?</h5>
-                  <p className="text-secondary small mx-auto mb-4" style={{ maxWidth: 440, lineHeight: 1.5 }}>
-                    I have full visibility into your target career, declared skills, assessment results, and roadmap milestones.
+                  <h5 className="fw-bold text-dark">Ministry Technical Guidance Chamber</h5>
+                  <p className="text-secondary small mx-auto mb-4" style={{ maxWidth: 460 }}>
+                    Inquire regarding official competency benchmarks, curricular clarifications, architectural best practices, and examination prerequisites.
                   </p>
 
                   <div className="d-flex flex-wrap justify-content-center gap-2">
                     {suggestedPrompts.map((prompt, i) => (
                       <button
                         key={i}
-                        className="btn btn-sm mac-btn-secondary text-secondary card-hover rounded-pill px-3"
+                        className="btn btn-sm btn-light border text-dark px-3 py-1.5"
                         style={{ fontSize: '0.82rem' }}
                         onClick={() => handleSendMessage(prompt)}
                       >
@@ -254,27 +221,26 @@ const MentorChatPage = () => {
                   const isUser = msg.sender === 'user';
                   return (
                     <div key={idx} className={`d-flex ${isUser ? 'justify-content-end' : 'justify-content-start'}`}>
-                      <div className={isUser ? 'chat-bubble-user' : 'chat-bubble-assistant'}>
-                        <div
-                          className="chat-text"
-                          style={{ whiteSpace: 'pre-wrap', lineHeight: 1.6 }}
-                        >
+                      <div
+                        className="p-3 rounded-2 shadow-sm"
+                        style={{
+                          maxWidth: '82%',
+                          background: isUser ? '#0F2C59' : '#F8FAFC',
+                          color: isUser ? '#FFFFFF' : '#0F172A',
+                          border: isUser ? 'none' : '1px solid #CBD5E1',
+                        }}
+                      >
+                        <div style={{ whiteSpace: 'pre-wrap', lineHeight: 1.6, fontSize: '0.92rem' }}>
                           {msg.content}
                         </div>
 
-                        {/* Suggested Follow-up Actions */}
                         {msg.suggestedActions && msg.suggestedActions.length > 0 && (
-                          <div className="mt-3 pt-2 border-top d-flex flex-wrap gap-1.5" style={{ borderColor: 'var(--mac-border)' }}>
+                          <div className="mt-3 pt-2 border-top d-flex flex-wrap gap-1.5">
                             {msg.suggestedActions.map((act, aIdx) => (
                               <button
                                 key={aIdx}
-                                className="btn btn-sm rounded-pill text-primary small py-1 px-3"
-                                style={{
-                                  fontSize: '0.78rem',
-                                  background: 'rgba(0, 113, 227, 0.08)',
-                                  border: '1px solid rgba(0, 113, 227, 0.2)',
-                                  fontWeight: 500,
-                                }}
+                                className="btn btn-sm btn-light border text-primary small py-1 px-2.5"
+                                style={{ fontSize: '0.78rem' }}
                                 onClick={() => handleSendMessage(act)}
                               >
                                 → {act}
@@ -290,32 +256,22 @@ const MentorChatPage = () => {
 
               {sending && (
                 <div className="d-flex justify-content-start">
-                  <div className="chat-bubble-assistant d-flex align-items-center gap-2">
-                    <span className="spinner-grow spinner-grow-sm text-primary" role="status"></span>
-                    <span className="small text-secondary">AI Mentor is analyzing your skill profile and composing advice...</span>
+                  <div className="p-3 bg-light border rounded-2 d-flex align-items-center gap-2">
+                    <span className="spinner-border spinner-border-sm text-primary" role="status"></span>
+                    <span className="small text-secondary">Ministry AI Advisor is synthesizing official guidance...</span>
                   </div>
                 </div>
               )}
               <div ref={messagesEndRef} />
             </div>
 
-            {/* Quick Prompt Pill Strip */}
-            <div
-              className="px-3 pt-2 d-flex gap-2 overflow-x-auto pb-2 border-top"
-              style={{
-                borderColor: 'var(--mac-border)',
-                background: 'rgba(140, 140, 150, 0.03)',
-              }}
-            >
+            {/* Quick Prompts Strip */}
+            <div className="px-3 pt-2 d-flex gap-2 overflow-x-auto pb-2 border-top bg-light">
               {suggestedPrompts.map((p, idx) => (
                 <button
                   key={idx}
-                  className="btn btn-sm rounded-pill text-secondary text-nowrap py-1 px-3"
-                  style={{
-                    fontSize: '0.76rem',
-                    background: 'var(--mac-surface)',
-                    border: '1px solid var(--mac-border)',
-                  }}
+                  className="btn btn-sm btn-white border text-secondary text-nowrap py-1 px-2.5"
+                  style={{ fontSize: '0.76rem', background: '#FFFFFF' }}
                   onClick={() => handleSendMessage(p)}
                 >
                   {p}
@@ -323,14 +279,8 @@ const MentorChatPage = () => {
               ))}
             </div>
 
-            {/* macOS Frosted Input Capsule */}
-            <div
-              className="p-3 border-top"
-              style={{
-                borderColor: 'var(--mac-border)',
-                background: 'var(--mac-surface)',
-              }}
-            >
+            {/* Input Bar */}
+            <div className="p-3 border-top bg-white">
               <form
                 onSubmit={(e) => {
                   e.preventDefault();
@@ -340,25 +290,18 @@ const MentorChatPage = () => {
               >
                 <input
                   type="text"
-                  className="form-control rounded-pill px-4"
-                  style={{
-                    background: 'rgba(140, 140, 150, 0.08)',
-                    border: '1px solid var(--mac-border)',
-                    color: 'var(--mac-text-primary)',
-                    fontSize: '0.92rem',
-                  }}
-                  placeholder="Ask a technical concept, roadmap question, or request a challenge..."
+                  className="form-control rounded-2"
+                  placeholder="Enter your technical or curriculum question here..."
                   value={inputMessage}
                   onChange={(e) => setInputMessage(e.target.value)}
                   disabled={sending}
                 />
                 <button
                   type="submit"
-                  className="btn btn-primary rounded-pill px-4 d-flex align-items-center gap-2"
+                  className="btn btn-primary px-4 fw-semibold"
                   disabled={sending || !inputMessage.trim()}
                 >
-                  <span>Send</span>
-                  <i className="bi bi-arrow-up-circle-fill fs-5"></i>
+                  Submit Query
                 </button>
               </form>
             </div>

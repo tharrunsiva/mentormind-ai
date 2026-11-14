@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { interviewAPI } from '../services/api';
 import { useAuth } from '../context/AuthContext';
-import { useTheme } from '../context/ThemeContext';
 import confetti from 'canvas-confetti';
 
 const InterviewRoomPage = () => {
-  const { profile } = useAuth();
-  const { isDark } = useTheme();
+  const { profile, user } = useAuth();
   const [history, setHistory] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -68,7 +66,7 @@ const InterviewRoomPage = () => {
         speakText(res.data.currentQuestion.questionText);
       }
     } catch (err) {
-      alert('Failed to start interview: ' + (err.response?.data?.message || err.message));
+      alert('Failed to initialize examination: ' + (err.response?.data?.message || err.message));
     } finally {
       setLoading(false);
     }
@@ -156,414 +154,366 @@ const InterviewRoomPage = () => {
     }
   };
 
+  const candidateId = `MM-IN-2026-${(user?._id || '90412').slice(-5).toUpperCase()}`;
+
   return (
-    <div className="fade-in">
+    <div>
       <div className="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
         <div>
-          <div className="ai-badge mb-1">
-            <span className="ai-pulse-dot"></span>
-            <span>Interactive Simulator</span>
+          <div className="gov-seal-badge mb-1">
+            <i className="bi bi-shield-shaded"></i>
+            <span>Board of Examiners</span>
           </div>
-          <h3 className="fw-bold mb-0" style={{ letterSpacing: '-0.02em' }}>AI Mock Interview Room</h3>
+          <h3 className="fw-bold text-dark mb-0">National Mock Examination Chamber</h3>
           <p className="text-secondary small mb-0">
-            Simulate career-specific interviews with rubric-driven scoring and adaptive feedback
+            Standardized technical and architectural oral examinations evaluated against Ministry benchmarks
           </p>
         </div>
 
         {!inSetup && (
-          <button className="btn mac-btn-secondary btn-sm" onClick={() => setInSetup(true)}>
-            <i className="bi bi-gear me-1"></i> New Simulation Setup
+          <button className="btn btn-outline-secondary btn-sm" onClick={() => setInSetup(true)}>
+            <i className="bi bi-arrow-left me-1"></i> Return to Examination Selection
           </button>
         )}
       </div>
 
-      {/* VIEW 1: INTERVIEW SETUP */}
+      {/* VIEW 1: EXAMINATION CONFIGURATION */}
       {inSetup && (
         <div className="row g-4 mb-4">
           <div className="col-lg-6">
-            <div className="card mac-card p-4 h-100">
-              <div className="d-flex align-items-center gap-2 mb-3">
-                <div className="mac-traffic-lights">
-                  <span className="mac-traffic-dot mac-traffic-close"></span>
-                  <span className="mac-traffic-dot mac-traffic-minimize"></span>
-                  <span className="mac-traffic-dot mac-traffic-zoom"></span>
+            <div className="card border bg-white h-100 shadow-sm">
+              <div className="card-header-gov">
+                <h6 className="fw-bold text-white mb-0">Examination Docket Configuration</h6>
+                <span className="badge bg-warning text-dark">FORM-EX-26</span>
+              </div>
+
+              <div className="p-4">
+                <div className="mb-3">
+                  <label className="form-label small fw-bold text-secondary">Candidate Registration ID</label>
+                  <input
+                    type="text"
+                    className="form-control form-control-sm font-monospace bg-light"
+                    value={candidateId}
+                    disabled
+                  />
                 </div>
-                <h5 className="fw-bold mb-0 ms-2">Configure Simulation</h5>
-              </div>
 
-              <div className="mb-3">
-                <label className="form-label small fw-semibold text-secondary">Target Role</label>
-                <input
-                  type="text"
-                  className="form-control rounded-3"
-                  style={{ background: 'var(--mac-surface)', border: '1px solid var(--mac-border)', color: 'var(--mac-text-primary)' }}
-                  value={jobRole}
-                  onChange={(e) => setJobRole(e.target.value)}
-                  placeholder="e.g. Full Stack Developer, Backend Engineer"
-                />
-              </div>
+                <div className="mb-3">
+                  <label className="form-label small fw-bold text-secondary">Target Role Classification</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    value={jobRole}
+                    onChange={(e) => setJobRole(e.target.value)}
+                    placeholder="e.g. Full Stack Developer, Systems Architect"
+                  />
+                </div>
 
-              <div className="mb-3">
-                <label className="form-label small fw-semibold text-secondary">Interview Category</label>
-                <select
-                  className="form-select rounded-3"
-                  style={{ background: 'var(--mac-surface)', border: '1px solid var(--mac-border)', color: 'var(--mac-text-primary)' }}
-                  value={category}
-                  onChange={(e) => setCategory(e.target.value)}
+                <div className="mb-3">
+                  <label className="form-label small fw-bold text-secondary">Examination Board Category</label>
+                  <select
+                    className="form-select"
+                    value={category}
+                    onChange={(e) => setCategory(e.target.value)}
+                  >
+                    <option value="technical">Technical Architecture & Systems Engineering</option>
+                    <option value="hr">Professional Ethics & Leadership Pitch</option>
+                    <option value="behavioral">Incident Response & Crisis Management (STAR)</option>
+                    <option value="scenario">Production Outage Simulation</option>
+                    <option value="mixed">Comprehensive Board Examination</option>
+                  </select>
+                </div>
+
+                <div className="row g-2 mb-4">
+                  <div className="col-6">
+                    <label className="form-label small fw-bold text-secondary">Standard Tier</label>
+                    <select
+                      className="form-select"
+                      value={difficulty}
+                      onChange={(e) => setDifficulty(e.target.value)}
+                    >
+                      <option value="Entry">Tier 1: Junior Officer</option>
+                      <option value="Mid-Level">Tier 2: Senior Specialist</option>
+                      <option value="Senior">Tier 3: Principal Architect</option>
+                    </select>
+                  </div>
+                  <div className="col-6">
+                    <label className="form-label small fw-bold text-secondary">Docket Questions</label>
+                    <select
+                      className="form-select"
+                      value={questionCount}
+                      onChange={(e) => setQuestionCount(parseInt(e.target.value))}
+                    >
+                      <option value="2">2 Questions (Fast Track)</option>
+                      <option value="3">3 Questions (Standard Docket)</option>
+                      <option value="4">4 Questions (Comprehensive)</option>
+                    </select>
+                  </div>
+                </div>
+
+                <button
+                  className="btn btn-primary w-100 py-2.5 fw-bold"
+                  onClick={handleStartInterview}
+                  disabled={loading}
                 >
-                  <option value="technical">Technical Architecture & Coding</option>
-                  <option value="hr">HR & Career Elevator Pitch</option>
-                  <option value="behavioral">Behavioral (STAR Method)</option>
-                  <option value="scenario">System Outage & Scenario Response</option>
-                  <option value="mixed">Mixed Comprehensive Round</option>
-                </select>
+                  {loading ? 'Initializing Board Examination...' : 'Enter Examination Chamber'}
+                </button>
               </div>
-
-              <div className="row g-2 mb-4">
-                <div className="col-6">
-                  <label className="form-label small fw-semibold text-secondary">Seniority Level</label>
-                  <select
-                    className="form-select rounded-3"
-                    style={{ background: 'var(--mac-surface)', border: '1px solid var(--mac-border)', color: 'var(--mac-text-primary)' }}
-                    value={difficulty}
-                    onChange={(e) => setDifficulty(e.target.value)}
-                  >
-                    <option value="Entry">Entry / Junior Level</option>
-                    <option value="Mid-Level">Mid-Level Engineer</option>
-                    <option value="Senior">Senior Architect</option>
-                  </select>
-                </div>
-                <div className="col-6">
-                  <label className="form-label small fw-semibold text-secondary">Question Count</label>
-                  <select
-                    className="form-select rounded-3"
-                    style={{ background: 'var(--mac-surface)', border: '1px solid var(--mac-border)', color: 'var(--mac-text-primary)' }}
-                    value={questionCount}
-                    onChange={(e) => setQuestionCount(parseInt(e.target.value))}
-                  >
-                    <option value="2">2 Questions (Sprint)</option>
-                    <option value="3">3 Questions (Standard)</option>
-                    <option value="4">4 Questions (Thorough)</option>
-                  </select>
-                </div>
-              </div>
-
-              <button
-                className="btn btn-primary w-100 py-2.5 fs-6 fw-semibold rounded-pill"
-                onClick={handleStartInterview}
-                disabled={loading}
-              >
-                {loading ? 'Initializing Simulation...' : 'Enter Mock Interview Room'}
-              </button>
             </div>
           </div>
 
           <div className="col-lg-6">
-            <div className="card mac-card p-4 h-100">
-              <h6 className="fw-bold small text-uppercase mb-2 text-secondary" style={{ letterSpacing: '0.04em' }}>
-                Evaluation Rubric Standard
-              </h6>
-              <p className="text-secondary small mb-3">
-                Responses are scored against objective criteria by the AI Mock Interview Agent:
-              </p>
-
-              <div className="d-flex flex-column gap-2 mb-3">
-                <div
-                  className="p-2.5 rounded-3 d-flex justify-content-between"
-                  style={{ background: 'var(--mac-surface)', border: '1px solid var(--mac-border)' }}
-                >
-                  <span className="fw-semibold small">1. Technical Depth</span>
-                  <span className="small text-secondary">Architectural correctness & tradeoffs</span>
-                </div>
-                <div
-                  className="p-2.5 rounded-3 d-flex justify-content-between"
-                  style={{ background: 'var(--mac-surface)', border: '1px solid var(--mac-border)' }}
-                >
-                  <span className="fw-semibold small">2. Relevance & Focus</span>
-                  <span className="small text-secondary">Directly answering prompt intent</span>
-                </div>
-                <div
-                  className="p-2.5 rounded-3 d-flex justify-content-between"
-                  style={{ background: 'var(--mac-surface)', border: '1px solid var(--mac-border)' }}
-                >
-                  <span className="fw-semibold small">3. Completeness</span>
-                  <span className="small text-secondary">Edge cases & production metrics</span>
-                </div>
-                <div
-                  className="p-2.5 rounded-3 d-flex justify-content-between"
-                  style={{ background: 'var(--mac-surface)', border: '1px solid var(--mac-border)' }}
-                >
-                  <span className="fw-semibold small">4. Communication Clarity</span>
-                  <span className="small text-secondary">Structured STAR articulation</span>
-                </div>
+            <div className="card border bg-light h-100 shadow-sm">
+              <div className="p-3 px-4 border-bottom bg-white">
+                <h6 className="fw-bold text-dark mb-0">Statutory Marking Scheme & Rubric</h6>
               </div>
 
-              <div
-                className="p-3 rounded-3 small text-secondary mt-auto"
-                style={{ background: 'rgba(0, 113, 227, 0.06)', border: '1px solid rgba(0, 113, 227, 0.15)' }}
-              >
-                <i className="bi bi-mic text-primary me-1"></i>
-                <strong>Voice Support Enabled:</strong> You can dictate answers using your browser microphone or type text directly into the room.
+              <div className="p-4 d-flex flex-column gap-2">
+                <div className="p-3 bg-white border rounded-2 d-flex justify-content-between align-items-center">
+                  <div>
+                    <span className="fw-bold text-dark d-block">1. Technical Veracity (35%)</span>
+                    <span className="small text-muted">Architectural correctness, security best practices</span>
+                  </div>
+                  <span className="badge bg-primary">35 Marks</span>
+                </div>
+
+                <div className="p-3 bg-white border rounded-2 d-flex justify-content-between align-items-center">
+                  <div>
+                    <span className="fw-bold text-dark d-block">2. Focus & Prompt Alignment (25%)</span>
+                    <span className="small text-muted">Directness of response without obfuscation</span>
+                  </div>
+                  <span className="badge bg-secondary">25 Marks</span>
+                </div>
+
+                <div className="p-3 bg-white border rounded-2 d-flex justify-content-between align-items-center">
+                  <div>
+                    <span className="fw-bold text-dark d-block">3. Completeness & Edge Conditions (20%)</span>
+                    <span className="small text-muted">Error boundaries, failovers, and scale limits</span>
+                  </div>
+                  <span className="badge bg-secondary">20 Marks</span>
+                </div>
+
+                <div className="p-3 bg-white border rounded-2 d-flex justify-content-between align-items-center">
+                  <div>
+                    <span className="fw-bold text-dark d-block">4. Communication Precision (20%)</span>
+                    <span className="small text-muted">Concise articulation, structured presentation</span>
+                  </div>
+                  <span className="badge bg-secondary">20 Marks</span>
+                </div>
+
+                <div className="p-3 bg-white border rounded-2 small text-secondary mt-2">
+                  <i className="bi bi-mic-fill text-primary me-1"></i>
+                  <strong>Oral Examination Enabled:</strong> Dictation speech recognition is active. Answers are recorded in official examination transcripts.
+                </div>
               </div>
             </div>
           </div>
         </div>
       )}
 
-      {/* VIEW 2: ACTIVE LIVE INTERVIEW - macOS FaceTime / Studio Camera View */}
+      {/* VIEW 2: ACTIVE EXAMINATION SESSION */}
       {!inSetup && !interviewReport && currentQuestion && (
-        <div className="card mac-card p-4 rounded-4 mb-4 shadow-lg">
-          {/* macOS FaceTime / Studio Top Bar */}
-          <div className="mac-facetime-frame mb-4" style={{ height: 200 }}>
-            <div className="mac-facetime-glass-header">
-              <div className="d-flex align-items-center gap-2">
-                <span className="badge rounded-pill bg-danger d-flex align-items-center gap-1.5 px-2.5 py-1">
-                  <span className="spinner-grow spinner-grow-sm text-light" style={{ width: 6, height: 6 }} role="status"></span>
-                  <span style={{ fontSize: '0.72rem', fontWeight: 600 }}>LIVE SIMULATION</span>
-                </span>
-                <span className="text-white small fw-medium">
-                  Question {currentQuestion.questionNumber} of {interviewSession?.totalQuestions}
-                </span>
-              </div>
-
-              <div className="d-flex align-items-center gap-2">
-                {isRecording && (
-                  <div className="mac-audio-wave me-2">
-                    <span className="mac-audio-bar"></span>
-                    <span className="mac-audio-bar"></span>
-                    <span className="mac-audio-bar"></span>
-                    <span className="mac-audio-bar"></span>
-                    <span className="mac-audio-bar"></span>
-                  </div>
-                )}
-                <button
-                  className="btn btn-sm btn-dark text-white rounded-pill border border-secondary px-3"
-                  onClick={() => speakText(currentQuestion.questionText)}
-                  title="Read Question Aloud"
-                >
-                  <i className="bi bi-volume-up-fill me-1"></i> Read Aloud
-                </button>
-              </div>
-            </div>
-
-            {/* Simulated Camera Center Badge */}
-            <div className="h-100 d-flex flex-column align-items-center justify-content-center text-center p-3">
-              <div
-                className="rounded-circle d-flex align-items-center justify-content-center text-white mb-2 shadow"
-                style={{
-                  width: 56,
-                  height: 56,
-                  background: 'linear-gradient(135deg, #0071E3 0%, #5856D6 100%)',
-                }}
-              >
-                <i className="bi bi-person-fill fs-3"></i>
-              </div>
-              <span className="text-white-50 small">Candidate Audio/Video Channel Active</span>
-            </div>
-          </div>
-
-          <div className="d-flex justify-content-between align-items-center pb-2 border-bottom mb-3" style={{ borderColor: 'var(--mac-border)' }}>
-            <div>
-              <span className="badge rounded-pill bg-primary me-2">
-                {currentQuestion.category.toUpperCase()}
+        <div className="card border bg-white rounded-3 mb-4 shadow-sm">
+          <div className="card-header-gov">
+            <div className="d-flex align-items-center gap-2">
+              <span className="badge bg-warning text-dark font-monospace">
+                QUESTION {currentQuestion.questionNumber} / {interviewSession?.totalQuestions}
               </span>
-              <span className="badge rounded-pill bg-light text-secondary border">
-                {interviewSession?.jobRole}
+              <span className="text-white fw-bold">
+                Docket: {interviewSession?.jobRole} ({interviewSession?.difficulty} Level)
               </span>
             </div>
-            <span className="small text-secondary">
-              Difficulty: {interviewSession?.difficulty}
-            </span>
-          </div>
-
-          <h4 className="fw-bold mb-4" style={{ lineHeight: 1.45, letterSpacing: '-0.02em' }}>
-            "{currentQuestion.questionText}"
-          </h4>
-
-          {/* Answer Input Area */}
-          <div className="mb-3 position-relative">
-            <textarea
-              className="form-control rounded-3"
-              style={{
-                background: 'var(--mac-surface)',
-                border: '1px solid var(--mac-border)',
-                color: 'var(--mac-text-primary)',
-                fontSize: '0.94rem',
-                lineHeight: 1.6,
-              }}
-              rows="6"
-              placeholder="Structure your answer clearly. Explain key architectural concepts, trade-offs, and past project precedents..."
-              value={answerText}
-              onChange={(e) => setAnswerText(e.target.value)}
-            />
-
-            {/* Mic Toggle Button */}
-            {speechSupported && (
-              <button
-                type="button"
-                className={`btn btn-sm position-absolute bottom-0 end-0 m-3 rounded-pill px-3 d-flex align-items-center gap-1.5 ${
-                  isRecording ? 'btn-danger animate-pulse' : 'mac-btn-secondary'
-                }`}
-                onClick={handleVoiceInputToggle}
-              >
-                <i className={`bi ${isRecording ? 'bi-stop-fill' : 'bi-mic-fill'}`}></i>
-                <span>{isRecording ? 'Recording Voice...' : 'Dictate Answer'}</span>
-              </button>
-            )}
-          </div>
-
-          <div className="d-flex justify-content-between align-items-center">
-            <span className="small text-secondary">
-              Word count: {answerText.trim().split(/\s+/).filter(Boolean).length} words
-            </span>
 
             <button
-              className="btn btn-primary px-4 py-2 fw-semibold rounded-pill"
-              onClick={handleSubmitAnswer}
-              disabled={evaluating || !answerText.trim()}
+              className="btn btn-sm btn-outline-light d-flex align-items-center gap-1"
+              onClick={() => speakText(currentQuestion.questionText)}
+              title="Read Question Aloud"
             >
-              {evaluating ? (
-                <>
-                  <span className="spinner-border spinner-border-sm me-2"></span>
-                  Evaluating Answer...
-                </>
-              ) : (
-                'Submit Answer & Next'
-              )}
+              <i className="bi bi-volume-up-fill"></i> Read Aloud
             </button>
           </div>
 
-          {/* Real-time Follow-up / Evaluation Feedback */}
-          {latestEvaluation && (
-            <div
-              className="mt-4 p-3 rounded-3"
-              style={{ background: 'rgba(52, 199, 89, 0.08)', border: '1px solid rgba(52, 199, 89, 0.2)' }}
-            >
-              <div className="d-flex justify-content-between align-items-center mb-1">
-                <span className="badge rounded-pill bg-success text-white">
-                  Previous Answer Score: {latestEvaluation.scores.overall}/100
-                </span>
-                <span className="small text-secondary">
-                  Tech: {latestEvaluation.scores.technical} • Clarity: {latestEvaluation.scores.clarity}
-                </span>
-              </div>
-              <p className="small mb-1">
-                <strong>Feedback:</strong> {latestEvaluation.feedback}
-              </p>
-              {latestEvaluation.followUpQuestion && (
-                <div className="small text-primary mt-2">
-                  <i className="bi bi-arrow-return-right me-1"></i>
-                  <strong>Follow-up Consideration:</strong> {latestEvaluation.followUpQuestion}
+          <div className="p-4">
+            <div className="p-3 rounded-2 bg-light border mb-4">
+              <span className="small text-muted fw-bold text-uppercase d-block mb-1" style={{ fontSize: '0.68rem' }}>
+                BOARD EXAMINER PROMPT
+              </span>
+              <h4 className="fw-bold text-dark mb-0" style={{ lineHeight: 1.45 }}>
+                "{currentQuestion.questionText}"
+              </h4>
+            </div>
+
+            {/* Answer Input Area */}
+            <div className="mb-3 position-relative">
+              <textarea
+                className="form-control"
+                rows="6"
+                placeholder="Structure your formal answer. Detail architectural trade-offs, security considerations, and production deployment patterns..."
+                value={answerText}
+                onChange={(e) => setAnswerText(e.target.value)}
+              />
+
+              {speechSupported && (
+                <button
+                  type="button"
+                  className={`btn btn-sm position-absolute bottom-0 end-0 m-3 px-3 d-flex align-items-center gap-1.5 ${
+                    isRecording ? 'btn-danger' : 'btn-light border'
+                  }`}
+                  onClick={handleVoiceInputToggle}
+                >
+                  <i className={`bi ${isRecording ? 'bi-stop-fill' : 'bi-mic-fill'}`}></i>
+                  <span>{isRecording ? 'Transcribing Oral Input...' : 'Dictate Oral Response'}</span>
+                </button>
+              )}
+            </div>
+
+            <div className="d-flex justify-content-between align-items-center">
+              <span className="small text-muted font-monospace">
+                Word Count: {answerText.trim().split(/\s+/).filter(Boolean).length} words
+              </span>
+
+              <button
+                className="btn btn-primary px-4 py-2 fw-bold"
+                onClick={handleSubmitAnswer}
+                disabled={evaluating || !answerText.trim()}
+              >
+                {evaluating ? (
+                  <>
+                    <span className="spinner-border spinner-border-sm me-2"></span>
+                    Board is Scoring Submission...
+                  </>
+                ) : (
+                  'Submit Formal Response & Proceed'
+                )}
+              </button>
+            </div>
+
+            {latestEvaluation && (
+              <div className="mt-4 p-3 bg-light border rounded-2">
+                <div className="d-flex justify-content-between align-items-center mb-1">
+                  <span className="badge bg-success text-white">
+                    Score: {latestEvaluation.scores.overall}/100 Marks
+                  </span>
+                  <span className="small text-muted font-monospace">
+                    Tech: {latestEvaluation.scores.technical} • Clarity: {latestEvaluation.scores.clarity}
+                  </span>
                 </div>
-              )}
-            </div>
-          )}
+                <p className="small text-dark mb-1">
+                  <strong>Examiner Remarks:</strong> {latestEvaluation.feedback}
+                </p>
+                {latestEvaluation.followUpQuestion && (
+                  <div className="small text-primary mt-1">
+                    <i className="bi bi-arrow-return-right me-1"></i>
+                    <strong>Follow-up Consideration:</strong> {latestEvaluation.followUpQuestion}
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
         </div>
       )}
 
-      {/* VIEW 3: COMPREHENSIVE INTERVIEW REPORT */}
+      {/* VIEW 3: COMPREHENSIVE EXAMINATION REPORT */}
       {interviewReport && (
-        <div className="card mac-card p-4 p-md-5 rounded-4 mb-4 shadow-lg">
-          <div className="text-center py-2 border-bottom mb-4" style={{ borderColor: 'var(--mac-border)' }}>
-            <span className="ai-badge mb-2">Simulation Complete</span>
-            <h2 className="fw-bold mb-1" style={{ letterSpacing: '-0.025em' }}>Interview Performance Report</h2>
-            <p className="text-secondary small">
-              Evaluated for <strong>{interviewReport.jobRole}</strong> ({interviewReport.difficulty} Level)
-            </p>
-
-            <div className="d-flex justify-content-center gap-4 my-4">
-              <div
-                className="p-3 rounded-4 text-center"
-                style={{ minWidth: 140, background: 'rgba(0, 113, 227, 0.08)', border: '1px solid rgba(0, 113, 227, 0.2)' }}
-              >
-                <span className="text-secondary small fw-bold d-block text-uppercase" style={{ fontSize: '0.68rem' }}>Overall Score</span>
-                <span className="fs-1 fw-bold text-primary">{interviewReport.overallScore}%</span>
-              </div>
-              <div
-                className="p-3 rounded-4 text-center"
-                style={{ minWidth: 140, background: 'rgba(52, 199, 89, 0.08)', border: '1px solid rgba(52, 199, 89, 0.2)' }}
-              >
-                <span className="text-secondary small fw-bold d-block text-uppercase" style={{ fontSize: '0.68rem' }}>Technical</span>
-                <span className="fs-1 fw-bold text-success">{interviewReport.technicalScore}%</span>
-              </div>
-              <div
-                className="p-3 rounded-4 text-center"
-                style={{ minWidth: 140, background: 'rgba(255, 159, 10, 0.08)', border: '1px solid rgba(255, 159, 10, 0.2)' }}
-              >
-                <span className="text-secondary small fw-bold d-block text-uppercase" style={{ fontSize: '0.68rem' }}>Clarity</span>
-                <span className="fs-1 fw-bold text-warning">{interviewReport.clarityScore}%</span>
-              </div>
-            </div>
-
-            <p className="small text-secondary mx-auto mb-0" style={{ maxWidth: 600, lineHeight: 1.55 }}>
-              {interviewReport.feedbackSummary}
-            </p>
+        <div className="card border bg-white rounded-3 mb-4 shadow-sm">
+          <div className="card-header-gov">
+            <h5 className="fw-bold text-white mb-0">Official Examination Result Certificate</h5>
+            <span className="gov-verified-pill bg-white text-dark">
+              RESULT VERIFIED
+            </span>
           </div>
 
-          <div className="row g-4 mb-4">
-            <div className="col-md-6">
-              <div
-                className="p-3 rounded-3 h-100"
-                style={{ background: 'var(--mac-surface)', border: '1px solid var(--mac-border)' }}
-              >
-                <h6 className="fw-bold text-success mb-2">
-                  <i className="bi bi-check-circle-fill me-1"></i> Strong Response Highlights
-                </h6>
-                <ul className="small text-secondary mb-0 ps-3">
-                  {interviewReport.strongPoints?.map((p, i) => (
-                    <li key={i} className="mb-1">{p}</li>
-                  ))}
-                </ul>
+          <div className="p-4 p-md-5">
+            <div className="text-center pb-3 border-bottom mb-4">
+              <span className="gov-seal-badge mb-2">OFFICIAL MARKSHEET</span>
+              <h2 className="fw-bold text-dark mb-1">Certificate of Competency Assessment</h2>
+              <p className="text-secondary small">
+                Candidate: <strong>{user?.name}</strong> ({candidateId}) • Examined for: <strong>{interviewReport.jobRole}</strong>
+              </p>
+
+              <div className="d-flex justify-content-center gap-4 my-4">
+                <div className="p-3 bg-light border rounded-2 text-center" style={{ minWidth: 140 }}>
+                  <span className="text-muted small fw-bold d-block">AGGREGATE SCORE</span>
+                  <span className="fs-1 fw-bold text-primary">{interviewReport.overallScore}%</span>
+                </div>
+                <div className="p-3 bg-light border rounded-2 text-center" style={{ minWidth: 140 }}>
+                  <span className="text-muted small fw-bold d-block">TECHNICAL DEPTH</span>
+                  <span className="fs-1 fw-bold text-success">{interviewReport.technicalScore}%</span>
+                </div>
+                <div className="p-3 bg-light border rounded-2 text-center" style={{ minWidth: 140 }}>
+                  <span className="text-muted small fw-bold d-block">COMMUNICATION</span>
+                  <span className="fs-1 fw-bold text-warning">{interviewReport.clarityScore}%</span>
+                </div>
+              </div>
+
+              <p className="small text-secondary mx-auto mb-0" style={{ maxWidth: 620 }}>
+                {interviewReport.feedbackSummary}
+              </p>
+            </div>
+
+            <div className="row g-4 mb-4">
+              <div className="col-md-6">
+                <div className="p-3 bg-light rounded-2 border h-100">
+                  <h6 className="fw-bold text-success mb-2">
+                    <i className="bi bi-check-circle-fill me-1"></i> Verified Competency Highlights
+                  </h6>
+                  <ul className="small text-secondary mb-0 ps-3">
+                    {interviewReport.strongPoints?.map((p, i) => (
+                      <li key={i} className="mb-1">{p}</li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+
+              <div className="col-md-6">
+                <div className="p-3 bg-light rounded-2 border h-100">
+                  <h6 className="fw-bold text-danger mb-2">
+                    <i className="bi bi-exclamation-triangle-fill me-1"></i> Prescribed Hardening Directives
+                  </h6>
+                  <ul className="small text-secondary mb-0 ps-3">
+                    {interviewReport.weakPoints?.map((p, i) => (
+                      <li key={i} className="mb-1">{p}</li>
+                    ))}
+                  </ul>
+                </div>
               </div>
             </div>
 
-            <div className="col-md-6">
-              <div
-                className="p-3 rounded-3 h-100"
-                style={{ background: 'var(--mac-surface)', border: '1px solid var(--mac-border)' }}
-              >
-                <h6 className="fw-bold text-danger mb-2">
-                  <i className="bi bi-exclamation-triangle-fill me-1"></i> Areas for Technical Hardening
-                </h6>
-                <ul className="small text-secondary mb-0 ps-3">
-                  {interviewReport.weakPoints?.map((p, i) => (
-                    <li key={i} className="mb-1">{p}</li>
-                  ))}
-                </ul>
-              </div>
+            <div className="text-center pt-2">
+              <button className="btn btn-primary px-5 py-2 fw-bold" onClick={() => setInSetup(true)}>
+                Schedule Another Examination Docket
+              </button>
             </div>
-          </div>
-
-          <div className="text-center pt-2">
-            <button className="btn btn-primary px-5 py-2.5 rounded-pill" onClick={() => setInSetup(true)}>
-              Start Another Interview Round
-            </button>
           </div>
         </div>
       )}
 
-      {/* Past Interview History Table */}
+      {/* Past Examinations History Table */}
       {history.length > 0 && inSetup && (
-        <div className="card mac-card p-4">
-          <h5 className="fw-bold mb-3">Past Interview Sessions</h5>
+        <div className="card border bg-white shadow-sm p-4">
+          <div className="d-flex justify-content-between align-items-center mb-3">
+            <h6 className="fw-bold text-dark mb-0">Official Examination Record History</h6>
+            <span className="badge bg-light text-secondary border small">{history.length} Entries</span>
+          </div>
+
           <div className="table-responsive">
-            <table className="table table-hover align-middle mb-0" style={{ color: 'var(--mac-text-primary)' }}>
+            <table className="gov-table">
               <thead>
-                <tr className="text-secondary small text-uppercase" style={{ borderColor: 'var(--mac-border)' }}>
-                  <th>Role</th>
-                  <th>Category</th>
-                  <th>Difficulty</th>
-                  <th>Score</th>
-                  <th>Date</th>
+                <tr>
+                  <th>Target Classification</th>
+                  <th>Board Category</th>
+                  <th>Standard Tier</th>
+                  <th>Marks Scored</th>
+                  <th>Examination Date</th>
                   <th>Action</th>
                 </tr>
               </thead>
               <tbody>
                 {history.map((item) => (
-                  <tr key={item._id} style={{ borderColor: 'var(--mac-border)' }}>
-                    <td className="fw-bold">{item.jobRole}</td>
+                  <tr key={item._id}>
+                    <td className="fw-bold text-dark">{item.jobRole}</td>
                     <td>
-                      <span className="badge rounded-pill bg-light text-secondary border">
+                      <span className="badge bg-light text-secondary border">
                         {item.category}
                       </span>
                     </td>
@@ -571,15 +521,15 @@ const InterviewRoomPage = () => {
                     <td>
                       <span className="fw-bold text-primary">{item.overallScore || 0}%</span>
                     </td>
-                    <td className="small text-secondary">
+                    <td className="small text-muted">
                       {new Date(item.createdAt).toLocaleDateString()}
                     </td>
                     <td>
                       <button
-                        className="btn btn-sm mac-btn-secondary py-1 px-3 rounded-pill"
+                        className="btn btn-sm btn-outline-primary py-1 px-3"
                         onClick={() => handleViewPastReport(item._id)}
                       >
-                        View Report
+                        Inspect Result
                       </button>
                     </td>
                   </tr>
