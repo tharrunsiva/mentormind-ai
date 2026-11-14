@@ -1,0 +1,17 @@
+{
+  "name": "mentormind-ai-monorepo",
+  "version": "1.0.0",
+  "description": "MentorMind AI - AI-Powered Adaptive Career & Learning Intelligence Platform",
+  "scripts": {
+    "dev": "concurrently -n \"BACKEND,FRONTEND\" -c \"cyan,magenta\" \"npm run backend\" \"npm run frontend\"",
+    "dev:all": "concurrently -n \"AI,BACKEND,FRONTEND\" -c \"yellow,cyan,magenta\" \"npm run ai\" \"npm run backend\" \"npm run frontend\"",
+    "start": "npm run dev",
+    "backend": "npm --prefix backend run dev",
+    "frontend": "npm --prefix frontend run dev",
+    "ai": "cd ai-service && .\\venv\\Scripts\\uvicorn app.main:app --port 8000 --reload",
+    "seed": "npm --prefix backend run seed"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  }
+}
